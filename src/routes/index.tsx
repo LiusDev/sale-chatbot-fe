@@ -1,0 +1,71 @@
+import ChannelsLayout from "@/app/(main)/channels/layout"
+import ChannelsPage from "@/app/(main)/channels/page"
+import MainLayout from "@/app/(main)/layout"
+import MainPage from "@/app/(main)/page"
+import PlaygroundLayout from "@/app/(main)/playground/layout"
+import PlaygroundPage from "@/app/(main)/playground/page"
+import ProductsLayout from "@/app/(main)/products/layout"
+import ProductsPage from "@/app/(main)/products/page"
+import ErrorPage from "@/app/404"
+import LoginPage from "@/app/auth/login/page"
+import Hydrate from "@/app/hydrate"
+import RootLayout from "@/app/layout"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
+
+const router = createBrowserRouter([
+	{
+		path: "/",
+		errorElement: <ErrorPage />,
+		hydrateFallbackElement: <Hydrate />,
+		element: <RootLayout />,
+		children: [
+			{
+				path: "",
+				element: <MainLayout />,
+				// loader: authLoader,
+				children: [
+					{
+						index: true,
+						element: <MainPage />,
+					},
+					{
+						path: "products",
+						element: <ProductsLayout />,
+						children: [
+							{
+								index: true,
+								element: <ProductsPage />,
+							},
+						],
+					},
+					{
+						path: "playground",
+						element: <PlaygroundLayout />,
+						children: [
+							{ index: true, element: <PlaygroundPage /> },
+						],
+					},
+					{
+						path: "channels",
+						element: <ChannelsLayout />,
+						children: [{ index: true, element: <ChannelsPage /> }],
+					},
+				],
+			},
+			{
+				path: "/auth",
+				children: [
+					{
+						path: "login",
+						element: <LoginPage />,
+						// loader: nonAuthLoader,
+					},
+				],
+			},
+		],
+	},
+])
+
+export default function Router() {
+	return <RouterProvider router={router} />
+}
