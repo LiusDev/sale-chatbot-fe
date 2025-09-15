@@ -68,7 +68,7 @@ export const translations = {
 		preview: "Xem trước",
 		creating: "Đang tạo...",
 		createGroup: "Tạo nhóm",
-		products: "sản phẩm",
+		products: "Sản phẩm",
 		hasProducts: "Có sản phẩm",
 		empty: "Trống",
 		deleteWarning:
