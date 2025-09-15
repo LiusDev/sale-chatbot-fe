@@ -114,17 +114,18 @@ export const translations = {
 	// Authentication
 	auth: {
 		welcomeBack: "Chào mừng trở lại",
-		signInToAccount: "Đăng nhập vào tài khoản của bạn để tiếp tục",
+		signInToAccount: "Đăng nhập vào tài khoản của bạn",
 		continueWithGoogle: "Tiếp tục với Google",
 		connecting: "Đang kết nối...",
-		failedToConnect:
-			"Không thể kết nối với dịch vụ xác thực. Vui lòng thử lại.",
+		failedToConnect: "Không thể kết nối. Vui lòng thử lại.",
 		termsOfService: "Điều khoản dịch vụ",
 		privacyPolicy: "Chính sách bảo mật",
-		byContining: "Bằng cách tiếp tục, bạn đồng ý với",
+		byContining: "Bằng việc tiếp tục, bạn đồng ý với",
 		and: "và",
-		needHelp: "Cần trợ giúp?",
+		needHelp: "Cần hỗ trợ?",
 		contactSupport: "Liên hệ hỗ trợ",
+		sessionExpired: "Phiên đăng nhập đã hết hạn",
+		pleaseSignInAgain: "Vui lòng đăng nhập lại để tiếp tục",
 	},
 
 	// Error messages

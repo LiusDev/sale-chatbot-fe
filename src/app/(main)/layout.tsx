@@ -4,6 +4,7 @@ import {
 	SidebarProvider,
 	SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { ReAuthDialog } from "@/components/re-auth-dialog"
 import { Outlet } from "react-router-dom"
 
 export default function MainLayout() {
@@ -39,6 +40,7 @@ export default function MainLayout() {
 					<Outlet />
 				</div>
 			</SidebarInset>
+			<ReAuthDialog />
 		</SidebarProvider>
 	)
 }

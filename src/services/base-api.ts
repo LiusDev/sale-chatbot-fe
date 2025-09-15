@@ -1,6 +1,6 @@
 import { BE_URL } from "@/lib/constant"
+import { useAuthStore } from "@/stores/auth.store"
 import ky, { type KyInstance } from "ky"
-import { redirect } from "react-router-dom"
 
 export class BaseApi {
 	protected api: KyInstance
@@ -30,9 +30,10 @@ export class BaseApi {
 				afterResponse: [
 					async (_req, _opts, res) => {
 						if (!res.ok) {
-							// Handle 401 Unauthorized - redirect to login
+							// Handle 401 Unauthorized - show auth dialog
 							if (res.status === 401) {
-								redirect("/auth/login")
+								// Trigger auth dialog via zustand store
+								useAuthStore.getState().showAuthDialog()
 								return res
 							}
 
