@@ -1,4 +1,4 @@
-import type { ApiResponse, PaginationParams } from "./common.type"
+import type { PaginationParams } from "./common.type"
 
 // ===== Product Group Types =====
 export interface ProductGroup {
@@ -20,10 +20,7 @@ export interface UpdateProductGroupRequest {
 
 export type GetProductGroupsParams = PaginationParams
 
-export type GetProductGroupsResponse = ApiResponse<ProductGroup[]>
-export type CreateProductGroupResponse = ApiResponse<ProductGroup>
-export type UpdateProductGroupResponse = ApiResponse<ProductGroup>
-export type DeleteProductGroupResponse = ApiResponse<object>
+// Product Group response types removed - use ApiResponse<T> directly in service
 
 // ===== Product Types =====
 export interface ProductImage {
@@ -80,11 +77,7 @@ export interface DeleteProductData {
 	deletedProduct: Omit<Product, "imageUrls">
 }
 
-export type GetProductsResponse = ApiResponse<Product[]>
-export type GetProductResponse = ApiResponse<Product>
-export type CreateProductResponse = ApiResponse<Product>
-export type UpdateProductResponse = ApiResponse<Product>
-export type DeleteProductResponse = ApiResponse<DeleteProductData>
+// Product response types removed - use ApiResponse<T> directly in service
 
 // ===== Service Method Parameters =====
 export interface ProductGroupParams {

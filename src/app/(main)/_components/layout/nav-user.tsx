@@ -79,15 +79,15 @@ export function NavUser({
 									alt={user.name}
 								/>
 								<AvatarFallback className="rounded-lg">
-									{data?.user.name.charAt(0) || "TYB"}
+									{data?.data?.user.name.charAt(0) || "TYB"}
 								</AvatarFallback>
 							</Avatar>
 							<div className="grid flex-1 text-left text-sm leading-tight">
 								<span className="truncate font-medium">
-									{data?.user.name || "Tuan Yen Bai"}
+									{data?.data?.user.name || "Tuan Yen Bai"}
 								</span>
 								<span className="truncate text-xs">
-									{data?.user.email ||
+									{data?.data?.user.email ||
 										"tuanngoanbaoai@gmail.com"}
 								</span>
 							</div>
@@ -108,15 +108,15 @@ export function NavUser({
 										alt={user.name}
 									/>
 									<AvatarFallback className="rounded-lg">
-										{data?.user.name.charAt(0) || "TYB"}
+										{data?.data?.user.name.charAt(0) || "TYB"}
 									</AvatarFallback>
 								</Avatar>
 								<div className="grid flex-1 text-left text-sm leading-tight">
 									<span className="truncate font-medium">
-										{data?.user.name || "Tuan Yen Bai"}
+										{data?.data?.user.name || "Tuan Yen Bai"}
 									</span>
 									<span className="truncate text-xs">
-										{data?.user.email ||
+										{data?.data?.user.email ||
 											"tuanngoanbaoai@gmail.com"}
 									</span>
 								</div>
@@ -154,7 +154,7 @@ export function NavUser({
 						<DropdownMenuSeparator />
 						<DropdownMenuItem onClick={handleLogout}>
 							<LogOut />
-							Log out
+							Đăng xuất
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Link } from "react-router-dom"
 import { useSpace } from "@/hooks/use-space"
+import { t } from "@/lib/translations"
 
 export function NavItems({
 	items,
@@ -24,7 +25,7 @@ export function NavItems({
 	const space = useSpace()
 	return (
 		<SidebarGroup className="group-data-[collapsible=icon]:hidden">
-			<SidebarGroupLabel>Menu</SidebarGroupLabel>
+			<SidebarGroupLabel>{t("navigation.menu")}</SidebarGroupLabel>
 			<SidebarMenu>
 				{items.map((item) => (
 					<SidebarMenuItem key={item.name}>

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { useGetSSOUrl } from "@/queries/auth.query"
 import { useState } from "react"
+import { t } from "@/lib/translations"
 
 export default function LoginPage() {
 	const [isLoading, setIsLoading] = useState(false)
@@ -11,12 +12,12 @@ export default function LoginPage() {
 	} = useGetSSOUrl("google", window.location.origin)
 
 	const handleGoogleLogin = async () => {
-		if (!ssoData?.authUrl) return
+		if (!ssoData?.data?.authUrl) return
 
 		setIsLoading(true)
 		try {
 			// Redirect to Google OAuth URL
-			window.location.href = ssoData.authUrl
+			window.location.href = ssoData.data.authUrl
 		} catch (error) {
 			console.error("Login failed:", error)
 			setIsLoading(false)
@@ -41,10 +42,10 @@ export default function LoginPage() {
 							</svg>
 						</div>
 						<h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-							Welcome Back
+							{t('auth.welcomeBack')}
 						</h1>
 						<p className="text-gray-600 dark:text-gray-400">
-							Sign in to your account to continue
+							{t('auth.signInToAccount')}
 						</p>
 					</div>
 
@@ -53,7 +54,7 @@ export default function LoginPage() {
 						<Button
 							onClick={handleGoogleLogin}
 							disabled={
-								isLoading || isFetchingSSO || !ssoData?.authUrl
+								isLoading || isFetchingSSO || !ssoData?.data?.authUrl
 							}
 							className="w-full h-12 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-all duration-200 font-medium"
 							variant="outline"
@@ -61,7 +62,7 @@ export default function LoginPage() {
 							{isLoading || isFetchingSSO ? (
 								<div className="flex items-center gap-3">
 									<div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
-									<span>Connecting...</span>
+									<span>{t('auth.connecting')}</span>
 								</div>
 							) : (
 								<div className="flex items-center gap-3">
@@ -87,7 +88,7 @@ export default function LoginPage() {
 											d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
 										/>
 									</svg>
-									<span>Continue with Google</span>
+									<span>{t('auth.continueWithGoogle')}</span>
 								</div>
 							)}
 						</Button>
@@ -96,8 +97,7 @@ export default function LoginPage() {
 						{error && (
 							<div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
 								<p className="text-sm text-red-600 dark:text-red-400 text-center">
-									Failed to connect to authentication service.
-									Please try again.
+									{t('auth.failedToConnect')}
 								</p>
 							</div>
 						)}
@@ -106,19 +106,19 @@ export default function LoginPage() {
 					{/* Footer */}
 					<div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
 						<p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-							By continuing, you agree to our{" "}
+							{t('auth.byContining')}{" "}
 							<a
 								href="#"
 								className="text-blue-600 dark:text-blue-400 hover:underline"
 							>
-								Terms of Service
+								{t('auth.termsOfService')}
 							</a>{" "}
-							and{" "}
+							{t('auth.and')}{" "}
 							<a
 								href="#"
 								className="text-blue-600 dark:text-blue-400 hover:underline"
 							>
-								Privacy Policy
+								{t('auth.privacyPolicy')}
 							</a>
 						</p>
 					</div>
@@ -127,12 +127,12 @@ export default function LoginPage() {
 				{/* Additional Info */}
 				<div className="mt-6 text-center">
 					<p className="text-sm text-gray-600 dark:text-gray-400">
-						Need help?{" "}
+						{t('auth.needHelp')}{" "}
 						<a
 							href="#"
 							className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
 						>
-							Contact Support
+							{t('auth.contactSupport')}
 						</a>
 					</p>
 				</div>

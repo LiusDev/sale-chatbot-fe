@@ -5,6 +5,7 @@ import { BotMessageSquare, Box, ChartNoAxesCombined, Rss } from "lucide-react"
 
 import { NavItems } from "./nav-items"
 import { NavUser } from "./nav-user"
+import { t } from "@/lib/translations"
 import {
 	Sidebar,
 	SidebarContent,
@@ -23,22 +24,22 @@ const data = {
 	},
 	navMain: [
 		{
-			name: "Trang chủ",
+			name: t("navigation.home"),
 			url: "/",
 			icon: ChartNoAxesCombined,
 		},
 		{
-			name: "Sản phẩm",
+			name: t("navigation.products"),
 			url: "/products",
 			icon: Box,
 		},
 		{
-			name: "Thử nghiệm",
+			name: t("navigation.playground"),
 			url: "/playground",
 			icon: BotMessageSquare,
 		},
 		{
-			name: "Quản lý kênh",
+			name: t("navigation.channels"),
 			url: "/channels",
 			icon: Rss,
 		},
@@ -58,10 +59,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 								</div>
 								<div className="grid flex-1 text-left text-sm leading-tight">
 									<span className="truncate font-medium">
-										Sales Chatbot
+										{t("app.name")}
 									</span>
 									<span className="truncate text-xs">
-										Tuấn Yên Bái
+										{t("app.author")}
 									</span>
 								</div>
 							</a>

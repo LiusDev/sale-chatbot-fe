@@ -1,11 +1,11 @@
 export type SSOProvider = "google"
 
-export interface GetSSOUrlResponse {
+export interface SSOUrlData {
 	authUrl: string
 	state: string
 }
 
-export interface GetMeResponse {
+export interface UserData {
 	user: {
 		id: number
 		name: string

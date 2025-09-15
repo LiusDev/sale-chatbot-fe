@@ -7,13 +7,11 @@ export class BaseApi {
 
 	constructor({
 		baseUrl = BE_URL,
-		groupPrefix = "",
 		headers = {
 			"Content-Type": "application/json",
 		},
 	}: {
 		baseUrl?: string
-		groupPrefix?: string
 		headers?: Record<string, string>
 	} = {}) {
 		const defaultBaseUrl =
@@ -22,8 +20,10 @@ export class BaseApi {
 				? `https://${window.location.hostname}:8787`
 				: `http://localhost:8787`
 
+		const finalBaseUrl = baseUrl || defaultBaseUrl
+
 		this.api = ky.create({
-			prefixUrl: `${baseUrl || defaultBaseUrl}/${groupPrefix}`,
+			prefixUrl: finalBaseUrl,
 			headers,
 			credentials: "include", // Enable cookies for cross-origin requests
 			hooks: {

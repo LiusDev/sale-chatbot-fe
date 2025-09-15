@@ -1,3 +1,103 @@
+import { Skeleton } from "@/components/ui/skeleton"
+import { Package } from "lucide-react"
+import { useGetProductGroups } from "@/queries/products.query"
+import { ProductGroupsGrid } from "./_components/product-groups-grid"
+import { t } from "@/lib/translations"
+
 export default function ProductsPage() {
-	return <div>ProductsPage</div>
+	const {
+		data: response,
+		isLoading,
+		error,
+	} = useGetProductGroups({
+		page: 1,
+		limit: 20,
+	})
+
+	const productGroups = response?.data || []
+
+	if (isLoading) {
+		return (
+			<div className="container mx-auto py-6">
+				<div className="flex items-center justify-between mb-6">
+					<div>
+						<Skeleton className="h-8 w-64" />
+						<Skeleton className="h-4 w-96 mt-2" />
+					</div>
+				</div>
+				<ProductGroupsGridSkeleton />
+			</div>
+		)
+	}
+
+	if (error) {
+		return (
+			<div className="container mx-auto py-6">
+				<div className="flex items-center justify-between mb-6">
+					<div>
+						<h1 className="text-3xl font-bold tracking-tight">
+							{t('products.title')}
+						</h1>
+						<p className="text-muted-foreground">
+							{t('products.description')}
+						</p>
+					</div>
+				</div>
+				<div className="flex items-center justify-center p-8">
+					<div className="text-center">
+						<Package className="mx-auto h-12 w-12 text-muted-foreground" />
+						<h3 className="mt-4 text-lg font-semibold">
+							{t('errors.failedToLoadProductGroups')}
+						</h3>
+						<p className="text-muted-foreground">
+							{error instanceof Error
+								? error.message
+								: t('errors.somethingWentWrong')}
+						</p>
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+	return (
+		<div className="container mx-auto py-6">
+			<div className="flex items-center justify-between mb-6">
+				<div>
+					<h1 className="text-3xl font-bold tracking-tight">
+						{t('products.title')}
+					</h1>
+					<p className="text-muted-foreground">
+						{t('products.description')}
+					</p>
+				</div>
+			</div>
+			<ProductGroupsGrid productGroups={productGroups} />
+		</div>
+	)
+}
+
+function ProductGroupsGridSkeleton() {
+	return (
+		<div className="space-y-6">
+			<div className="flex justify-end">
+				<Skeleton className="h-10 w-32" />
+			</div>
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+				{Array.from({ length: 8 }).map((_, i) => (
+					<div key={i} className="border rounded-lg p-4 space-y-4">
+						<div className="space-y-2">
+							<Skeleton className="h-6 w-3/4" />
+							<Skeleton className="h-4 w-full" />
+						</div>
+						<div className="flex items-center gap-2">
+							<Skeleton className="h-4 w-4" />
+							<Skeleton className="h-4 w-20" />
+						</div>
+						<Skeleton className="h-6 w-16" />
+					</div>
+				))}
+			</div>
+		</div>
+	)
 }

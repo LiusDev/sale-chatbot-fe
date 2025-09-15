@@ -6,6 +6,8 @@ import PlaygroundLayout from "@/app/(main)/playground/layout"
 import PlaygroundPage from "@/app/(main)/playground/page"
 import ProductsLayout from "@/app/(main)/products/layout"
 import ProductsPage from "@/app/(main)/products/page"
+import GroupProductsPage from "@/app/(main)/products/[groupId]/page"
+import ProductDetailPage from "@/app/(main)/products/[groupId]/[productId]/page"
 import ErrorPage from "@/app/404"
 import LoginPage from "@/app/auth/login/page"
 import Hydrate from "@/app/hydrate"
@@ -35,6 +37,14 @@ const router = createBrowserRouter([
 							{
 								index: true,
 								element: <ProductsPage />,
+							},
+							{
+								path: ":groupId",
+								element: <GroupProductsPage />,
+							},
+							{
+								path: ":groupId/:productId",
+								element: <ProductDetailPage />,
 							},
 						],
 					},

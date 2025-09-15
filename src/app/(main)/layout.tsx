@@ -14,6 +14,7 @@ import {
 	SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { Outlet } from "react-router-dom"
+import { t } from "@/lib/translations"
 
 export default function MainLayout() {
 	return (
@@ -31,13 +32,13 @@ export default function MainLayout() {
 							<BreadcrumbList>
 								<BreadcrumbItem className="hidden md:block">
 									<BreadcrumbLink href="#">
-										Building Your Application
+										{t('breadcrumbs.buildingApplication')}
 									</BreadcrumbLink>
 								</BreadcrumbItem>
 								<BreadcrumbSeparator className="hidden md:block" />
 								<BreadcrumbItem>
 									<BreadcrumbPage>
-										Data Fetching
+										{t('breadcrumbs.dataFetching')}
 									</BreadcrumbPage>
 								</BreadcrumbItem>
 							</BreadcrumbList>
