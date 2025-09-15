@@ -15,6 +15,7 @@ import { CreateProductGroupDialog } from "./create-product-group-dialog"
 import { EditProductGroupDialog } from "./edit-product-group-dialog"
 import { DeleteProductGroupDialog } from "./delete-product-group-dialog"
 import type { ProductGroup } from "@/types/products.type"
+import { t } from "@/lib/translations"
 
 interface ProductGroupsGridProps {
 	productGroups: ProductGroup[]
@@ -34,7 +35,7 @@ export function ProductGroupsGrid({ productGroups }: ProductGroupsGridProps) {
 			<div className="flex justify-end">
 				<Button onClick={() => setShowCreateDialog(true)}>
 					<Plus className="mr-2 h-4 w-4" />
-					Tạo nhóm sản phẩm
+					{t("products.createProductGroup")}
 				</Button>
 			</div>
 
@@ -44,14 +45,14 @@ export function ProductGroupsGrid({ productGroups }: ProductGroupsGridProps) {
 					<div className="text-center">
 						<Package className="mx-auto h-12 w-12 text-muted-foreground" />
 						<h3 className="mt-4 text-lg font-semibold">
-							Không có nhóm sản phẩm
+							{t("products.noProductGroups")}
 						</h3>
 						<p className="text-muted-foreground mb-4">
-							Bắt đầu bằng cách tạo nhóm sản phẩm đầu tiên
+							{t("products.startByCreatingFirstGroup")}
 						</p>
 						<Button onClick={() => setShowCreateDialog(true)}>
 							<Plus className="mr-2 h-4 w-4" />
-							Tạo nhóm sản phẩm
+							{t("products.createProductGroup")}
 						</Button>
 					</div>
 				</div>
@@ -153,7 +154,7 @@ function ProductGroupCard({
 				<div className="flex items-center gap-2">
 					<Package className="h-4 w-4 text-muted-foreground" />
 					<span className="text-sm text-muted-foreground">
-						{group.productCount || 0} sản phẩm
+						{group.productCount || 0} {t("products.products")}
 					</span>
 				</div>
 			</CardContent>

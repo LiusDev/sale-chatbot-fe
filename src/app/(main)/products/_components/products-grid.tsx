@@ -15,6 +15,7 @@ import { Plus, Image as ImageIcon, Package } from "lucide-react"
 import { UpsertProductDialog } from "./upsert-product-dialog"
 import { DeleteProductDialog } from "./delete-product-dialog"
 import type { Product } from "@/types/products.type"
+import { t } from "@/lib/translations"
 
 interface ProductsGridProps {
 	groupId: number
@@ -33,15 +34,15 @@ export function ProductsGrid({ groupId, products }: ProductsGridProps) {
 			<div className="flex items-center justify-between">
 				<div>
 					<h1 className="text-3xl font-bold tracking-tight">
-						Sản phẩm
+						{t("products.products")}
 					</h1>
 					<p className="text-muted-foreground">
-						Quản lý sản phẩm trong nhóm này
+						{t("products.manageProductsInGroup")}
 					</p>
 				</div>
 				<Button onClick={() => setShowCreateDialog(true)}>
 					<Plus className="mr-2 h-4 w-4" />
-					Thêm sản phẩm
+					{t("products.addProduct")}
 				</Button>
 			</div>
 
@@ -51,15 +52,14 @@ export function ProductsGrid({ groupId, products }: ProductsGridProps) {
 					<div className="text-center">
 						<Package className="mx-auto h-12 w-12 text-muted-foreground" />
 						<h3 className="mt-4 text-lg font-semibold">
-							No products found
+							{t("products.noProductsFound")}
 						</h3>
 						<p className="text-muted-foreground mb-4">
-							Get started by adding your first product to this
-							group
+							{t("products.startByAddingFirstProduct")}
 						</p>
 						<Button onClick={() => setShowCreateDialog(true)}>
 							<Plus className="mr-2 h-4 w-4" />
-							Add Product
+							{t("products.addProduct")}
 						</Button>
 					</div>
 				</div>

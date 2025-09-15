@@ -40,6 +40,7 @@ export const translations = {
 		createProductGroup: "Tạo nhóm sản phẩm",
 		editProduct: "Chỉnh sửa sản phẩm",
 		editProductGroup: "Chỉnh sửa nhóm sản phẩm",
+		updateGroupDetails: "Cập nhật thông tin nhóm sản phẩm của bạn.",
 		deleteProduct: "Xóa sản phẩm",
 		deleteProductGroup: "Xóa nhóm sản phẩm",
 		productDetails: "Chi tiết sản phẩm",
@@ -83,6 +84,31 @@ export const translations = {
 		valuePlaceholder: "Giá trị (ví dụ: đỏ, xanh)",
 		saveChanges: "Lưu thay đổi",
 		saving: "Đang lưu...",
+		noProductGroups: "Không có nhóm sản phẩm",
+		startByCreatingFirstGroup:
+			"Bắt đầu bằng cách tạo nhóm sản phẩm đầu tiên",
+		manageProductsInGroup: "Quản lý sản phẩm trong nhóm này",
+		addProduct: "Thêm sản phẩm",
+		noProductsFound: "Không tìm thấy sản phẩm",
+		startByAddingFirstProduct:
+			"Bắt đầu bằng cách thêm sản phẩm đầu tiên vào nhóm này",
+		basicInfo: "Thông tin cơ bản",
+		additionalInfo: "Thông tin bổ sung (Metadata)",
+		currentImages: "Hình ảnh hiện tại",
+		newImages: "Hình ảnh mới thêm",
+		metadataPreview: "Xem trước thông tin bổ sung",
+		updateProductDetails: "Cập nhật thông tin chi tiết của sản phẩm",
+		productMustHaveAtLeastOneImage: "Sản phẩm phải có ít nhất 1 hình ảnh",
+		invalidFileType: "Loại tệp không hợp lệ",
+		fileTooLarge: "Tệp quá lớn",
+		confirmDelete: "Bạn có chắc chắn muốn xóa sản phẩm",
+		actionCannotBeUndone: "⚠️ Hành động này không thể hoàn tác!",
+		dataWillBeDeleted:
+			"Tất cả dữ liệu và hình ảnh của sản phẩm sẽ bị xóa vĩnh viễn.",
+		productDeletedSuccessfully: "đã được xóa thành công",
+		errorDeletingProduct: "Không thể xóa sản phẩm",
+		errorDeletingProductDescription:
+			"Đã xảy ra lỗi khi xóa sản phẩm. Vui lòng thử lại.",
 	},
 
 	// Authentication
@@ -115,7 +141,9 @@ export const translations = {
 		nameTooLong: "Tên quá dài",
 		priceMustBePositive: "Giá phải là số dương",
 		failedToCreateProduct: "Không thể tạo sản phẩm",
+		failedToUpdateProduct: "Không thể cập nhật sản phẩm",
 		failedToCreateProductGroup: "Không thể tạo nhóm sản phẩm",
+		failedToUpdateProductGroup: "Không thể cập nhật nhóm sản phẩm",
 		failedToDeleteProductGroup: "Không thể xóa nhóm sản phẩm",
 		cannotDeleteGroupWithProducts:
 			"Không thể xóa nhóm có sản phẩm. Vui lòng xóa tất cả sản phẩm trước.",

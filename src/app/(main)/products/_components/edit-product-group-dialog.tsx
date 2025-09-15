@@ -26,9 +26,13 @@ import { Textarea } from "@/components/ui/textarea"
 import { useUpdateProductGroup } from "@/queries/products.query"
 import { toast } from "sonner"
 import type { ProductGroup } from "@/types/products.type"
+import { t } from "@/lib/translations"
 
 const editProductGroupSchema = z.object({
-	name: z.string().min(1, "Name is required").max(100, "Name too long"),
+	name: z
+		.string()
+		.min(1, t("validation.nameRequired"))
+		.max(100, t("validation.nameTooLong")),
 	description: z.string().optional(),
 })
 
@@ -71,11 +75,13 @@ export function EditProductGroupDialog({
 				params: { groupId: group.id },
 				data,
 			})
-			toast.success("Product group updated successfully")
+			toast.success(t("success.productGroupUpdated"))
 			onOpenChange(false)
 		} catch (error) {
 			toast.error(
-				error instanceof Error ? error.message : "Failed to update product group"
+				error instanceof Error
+					? error.message
+					: t("errors.failedToUpdateProductGroup")
 			)
 		} finally {
 			setIsSubmitting(false)
@@ -96,23 +102,28 @@ export function EditProductGroupDialog({
 		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Edit Product Group</DialogTitle>
+					<DialogTitle>{t("products.editProductGroup")}</DialogTitle>
 					<DialogDescription>
-						Update the details of your product group.
+						{t("products.updateGroupDetails")}
 					</DialogDescription>
 				</DialogHeader>
 
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+					<form
+						onSubmit={form.handleSubmit(onSubmit)}
+						className="space-y-4"
+					>
 						<FormField
 							control={form.control}
 							name="name"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Name</FormLabel>
+									<FormLabel>{t("products.name")}</FormLabel>
 									<FormControl>
 										<Input
-											placeholder="Enter group name"
+											placeholder={t(
+												"products.enterGroupName"
+											)}
 											{...field}
 										/>
 									</FormControl>
@@ -126,10 +137,14 @@ export function EditProductGroupDialog({
 							name="description"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Description</FormLabel>
+									<FormLabel>
+										{t("products.descriptionOptional")}
+									</FormLabel>
 									<FormControl>
 										<Textarea
-											placeholder="Enter group description (optional)"
+											placeholder={t(
+												"products.enterGroupDescription"
+											)}
 											className="resize-none"
 											rows={3}
 											{...field}
@@ -147,10 +162,12 @@ export function EditProductGroupDialog({
 								onClick={() => handleOpenChange(false)}
 								disabled={isSubmitting}
 							>
-								Cancel
+								{t("actions.cancel")}
 							</Button>
 							<Button type="submit" disabled={isSubmitting}>
-								{isSubmitting ? "Updating..." : "Update Group"}
+								{isSubmitting
+									? t("products.saving")
+									: t("products.saveChanges")}
 							</Button>
 						</DialogFooter>
 					</form>

@@ -1,7 +1,12 @@
 "use client"
 
 import * as React from "react"
-import { BotMessageSquare, Box, ChartNoAxesCombined, Rss } from "lucide-react"
+import {
+	BotMessageSquare,
+	ChartNoAxesCombined,
+	Package,
+	Rss,
+} from "lucide-react"
 
 import { NavItems } from "./nav-items"
 import { NavUser } from "./nav-user"
@@ -31,7 +36,7 @@ const data = {
 		{
 			name: t("navigation.products"),
 			url: "/products",
-			icon: Box,
+			icon: Package,
 		},
 		{
 			name: t("navigation.playground"),

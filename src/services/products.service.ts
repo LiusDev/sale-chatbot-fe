@@ -10,7 +10,6 @@ import type {
 	Product,
 	CreateProductRequest,
 	UpdateProductRequest,
-	DeleteProductData,
 
 	// Parameter types
 	ProductGroupParams,
@@ -131,7 +130,7 @@ class ProductsService extends BaseApi {
 	async deleteProduct({ groupId, productId }: ProductParams) {
 		return this.api
 			.delete(`${GROUP_PREFIX}/${groupId}/${productId}`)
-			.json<ApiResponse<DeleteProductData>>()
+			.json<ApiResponse<object>>()
 	}
 }
 

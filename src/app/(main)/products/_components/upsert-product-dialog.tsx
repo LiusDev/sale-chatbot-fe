@@ -74,6 +74,7 @@ export function UpsertProductDialog({
 	const [existingImages, setExistingImages] = useState<Product["imageUrls"]>(
 		[]
 	)
+	const [imageError, setImageError] = useState<string | null>(null)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 
 	const createProduct = useCreateProduct()
@@ -139,11 +140,11 @@ export function UpsertProductDialog({
 		// Validate files
 		const validFiles = files.filter((file) => {
 			if (!isValidImageType(file)) {
-				toast.error(`Loại tệp không hợp lệ: ${file.name}`)
+				toast.error(`${t("products.invalidFileType")}: ${file.name}`)
 				return false
 			}
 			if (!isValidImageSize(file)) {
-				toast.error(`Tệp quá lớn: ${file.name}`)
+				toast.error(`${t("products.fileTooLarge")}: ${file.name}`)
 				return false
 			}
 			return true
@@ -154,6 +155,16 @@ export function UpsertProductDialog({
 		// Create preview URLs
 		const urls = validFiles.map((file) => URL.createObjectURL(file))
 		setPreviewUrls(urls)
+
+		// Clear image error when files are selected
+		if (validFiles.length > 0) {
+			setImageError(null)
+		}
+
+		// Reset file input value to allow selecting the same file again
+		if (event.target) {
+			event.target.value = ""
+		}
 	}
 
 	const removeFile = (index: number) => {
@@ -165,11 +176,21 @@ export function UpsertProductDialog({
 
 		setSelectedFiles(newFiles)
 		setPreviewUrls(newUrls)
+
+		// Check if no images remain after removal
+		if (newFiles.length === 0 && existingImages.length === 0) {
+			setImageError(t("products.productMustHaveAtLeastOneImage"))
+		}
 	}
 
 	const removeExistingImage = (index: number) => {
 		const newImages = existingImages.filter((_, i) => i !== index)
 		setExistingImages(newImages)
+
+		// Check if no images remain after removal
+		if (newImages.length === 0 && selectedFiles.length === 0) {
+			setImageError(t("products.productMustHaveAtLeastOneImage"))
+		}
 	}
 
 	const addMetadataEntry = () => {
@@ -193,6 +214,18 @@ export function UpsertProductDialog({
 	const onSubmit = async (data: UpsertProductForm) => {
 		setIsSubmitting(true)
 		try {
+			// Validate that at least 1 image is provided
+			const totalImages = existingImages.length + selectedFiles.length
+			if (totalImages === 0) {
+				setImageError(t("products.productMustHaveAtLeastOneImage"))
+				toast.error(t("products.productMustHaveAtLeastOneImage"))
+				setIsSubmitting(false)
+				return
+			}
+
+			// Clear image error if validation passes
+			setImageError(null)
+
 			// Convert metadata entries to JSON string
 			const metadata = metadataEntries.reduce((acc, entry) => {
 				if (entry.key.trim() && entry.value.trim()) {
@@ -243,7 +276,7 @@ export function UpsertProductDialog({
 
 				// Keep existing images that weren't removed
 				const existingImagesList = existingImages.map((img, index) => ({
-					url: img.presignedUrl || img.url,
+					url: img.url, // Use original object key, not presigned URL
 					altText:
 						img.altText || `${data.name} existing ${index + 1}`,
 					index: index,
@@ -308,6 +341,11 @@ export function UpsertProductDialog({
 		setPreviewUrls([])
 		setMetadataEntries([])
 		setExistingImages([])
+		setImageError(null)
+		// Reset file input value
+		if (fileInputRef.current) {
+			fileInputRef.current.value = ""
+		}
 		onOpenChange(false)
 	}
 
@@ -324,7 +362,9 @@ export function UpsertProductDialog({
 					</DialogTitle>
 					<DialogDescription>
 						{isEdit
-							? `Cập nhật thông tin chi tiết của sản phẩm "${product?.name}"`
+							? `${t("products.updateProductDetails")} "${
+									product?.name
+							  }"`
 							: t("products.addNewProduct")}
 					</DialogDescription>
 				</DialogHeader>
@@ -341,7 +381,7 @@ export function UpsertProductDialog({
 								<Card>
 									<CardHeader>
 										<CardTitle className="text-lg">
-											Thông tin cơ bản
+											{t("products.basicInfo")}
 										</CardTitle>
 									</CardHeader>
 									<CardContent className="space-y-4">
@@ -425,7 +465,7 @@ export function UpsertProductDialog({
 								<Card>
 									<CardHeader>
 										<CardTitle className="text-lg flex items-center justify-between">
-											{t("products.images")}
+											{t("products.images")} *
 											<Button
 												type="button"
 												variant="outline"
@@ -449,12 +489,21 @@ export function UpsertProductDialog({
 											onChange={handleFileSelect}
 										/>
 
+										{/* Image validation error */}
+										{imageError && (
+											<div className="mb-4 p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
+												{imageError}
+											</div>
+										)}
+
 										{/* Existing Images (Edit Mode) */}
 										{mode === "edit" &&
 											existingImages.length > 0 && (
 												<div className="mb-4">
 													<h4 className="text-sm font-medium mb-2 text-muted-foreground">
-														Hình ảnh hiện tại
+														{t(
+															"products.currentImages"
+														)}
 													</h4>
 													<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
 														{existingImages.map(
@@ -516,7 +565,9 @@ export function UpsertProductDialog({
 											<div className="mb-4">
 												{mode === "edit" && (
 													<h4 className="text-sm font-medium mb-2 text-muted-foreground">
-														Hình ảnh mới thêm
+														{t(
+															"products.newImages"
+														)}
 													</h4>
 												)}
 												<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -588,7 +639,7 @@ export function UpsertProductDialog({
 								<Card>
 									<CardHeader>
 										<CardTitle className="text-lg flex items-center justify-between">
-											Thông tin bổ sung (Metadata)
+											{t("products.additionalInfo")}
 											<Button
 												type="button"
 												variant="outline"
@@ -596,7 +647,7 @@ export function UpsertProductDialog({
 												onClick={addMetadataEntry}
 											>
 												<Plus className="h-4 w-4 mr-1" />
-												Thêm
+												{t("actions.add")}
 											</Button>
 										</CardTitle>
 									</CardHeader>
@@ -683,7 +734,7 @@ export function UpsertProductDialog({
 									<Card>
 										<CardHeader>
 											<CardTitle className="text-sm">
-												Xem trước thông tin bổ sung
+												{t("products.metadataPreview")}
 											</CardTitle>
 										</CardHeader>
 										<CardContent>
