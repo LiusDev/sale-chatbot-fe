@@ -42,7 +42,12 @@ export function ReAuthDialog() {
 
 	return (
 		<Dialog open={isAuthDialogOpen} onOpenChange={handleOpenChange}>
-			<DialogContent className="sm:max-w-md" showCloseButton={false}>
+			<DialogContent
+				className="sm:max-w-md"
+				showCloseButton={false}
+				closeOnOutsideClick={false}
+				closeOnEsc={false}
+			>
 				<DialogHeader>
 					<DialogTitle className="text-center">
 						{t("auth.sessionExpired")}
