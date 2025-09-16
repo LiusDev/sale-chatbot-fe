@@ -4,21 +4,23 @@ import type {
 	AIAgent,
 	CreateAIAgentRequest,
 	UpdateAIAgentRequest,
-	
-	// Parameter types
 	AIAgentParams,
-} from "@/types/ai-agents.type"
+
+	// Chat types
+	SendMessageRequest,
+	SendMessageResponse,
+} from "@/types/ai.type"
 import type { ApiResponse } from "@/types/common.type"
 import { BaseApi } from "./base-api"
 
 const AI_PREFIX = "ai"
 
-class AIAgentsService extends BaseApi {
+class AIService extends BaseApi {
 	constructor() {
 		super()
 	}
 
-	// ===== AI Agents API =====
+	// ===== AI Agents CRUD =====
 
 	/**
 	 * Get all AI agents with pagination and search
@@ -33,7 +35,7 @@ class AIAgentsService extends BaseApi {
 
 	/**
 	 * Get single AI agent by ID
-	 * GET /ai/{agentId}
+	 * GET /ai/:agentId
 	 */
 	async getAIAgent({ agentId }: AIAgentParams) {
 		return this.api
@@ -53,7 +55,7 @@ class AIAgentsService extends BaseApi {
 
 	/**
 	 * Update an AI agent
-	 * PUT /ai/{agentId}
+	 * PUT /ai/:agentId
 	 */
 	async updateAIAgent(
 		{ agentId }: AIAgentParams,
@@ -66,14 +68,48 @@ class AIAgentsService extends BaseApi {
 
 	/**
 	 * Delete an AI agent
-	 * DELETE /ai/{agentId}
+	 * DELETE /ai/:agentId
 	 */
 	async deleteAIAgent({ agentId }: AIAgentParams) {
 		return this.api
 			.delete(`${AI_PREFIX}/${agentId}`)
 			.json<ApiResponse<{ message: string }>>()
 	}
+
+	// ===== Chat/Conversation Methods =====
+
+	/**
+	 * Send a message to an AI agent
+	 * POST /ai/:agentId/chat
+	 */
+	async sendMessage({ agentId }: AIAgentParams, data: SendMessageRequest) {
+		return this.api
+			.post(`${AI_PREFIX}/${agentId}/chat`, { json: data })
+			.json<ApiResponse<SendMessageResponse>>()
+	}
+
+	/**
+	 * Stream a message to an AI agent (for real-time responses)
+	 * POST /ai/:agentId/chat/stream
+	 */
+	async sendMessageStream(
+		{ agentId }: AIAgentParams,
+		data: SendMessageRequest
+	): Promise<ReadableStream<Uint8Array>> {
+		const response = await this.api.post(
+			`${AI_PREFIX}/${agentId}/chat/stream`,
+			{
+				json: data,
+			}
+		)
+
+		if (!response.body) {
+			throw new Error("No response body for streaming")
+		}
+
+		return response.body
+	}
 }
 
-const aiAgentsService = new AIAgentsService()
-export default aiAgentsService
+const aiService = new AIService()
+export default aiService
