@@ -5,7 +5,7 @@ export interface AIAgent {
 	id: number
 	name: string
 	description?: string
-	model: string
+	model: AIModel
 	system_prompt: string
 	knowledge_source_group_id?: number
 	knowledge_source_name?: string
@@ -21,23 +21,23 @@ export interface AIAgent {
 export interface CreateAIAgentRequest {
 	name: string
 	description?: string
-	model: string
-	system_prompt: string
-	knowledge_source_group_id?: number
-	top_k?: number
+	model: AIModel
+	systemPrompt: string
+	knowledgeSourceGroupId?: number
+	topK?: number
 	temperature?: number
-	max_tokens?: number
+	maxTokens?: number
 }
 
 export interface UpdateAIAgentRequest {
 	name?: string
 	description?: string
-	model?: string
-	system_prompt?: string
-	knowledge_source_group_id?: number
-	top_k?: number
+	model?: AIModel
+	systemPrompt?: string
+	knowledgeSourceGroupId?: number
+	topK?: number
 	temperature?: number
-	max_tokens?: number
+	maxTokens?: number
 }
 
 export type GetAIAgentsParams = PaginationParams
@@ -48,10 +48,10 @@ export interface AIAgentParams {
 }
 
 // ===== AI Model Configuration =====
-export type AIModels = "gpt-4.1-mini-2025-04-14"
+export type AIModel = "gpt-4.1-mini-2025-04-14"
 
 export interface AIModelConfig {
-	name: AIModels
+	name: AIModel
 	displayName: string
 	maxTokens: number
 	description?: string
@@ -62,15 +62,15 @@ export const AI_MODELS: AIModelConfig[] = [
 		name: "gpt-4.1-mini-2025-04-14",
 		displayName: "GPT-4.1 Mini",
 		maxTokens: 8000,
-		description: "Balanced performance and cost for most use cases",
+		description: "Mô hình AI có khả năng tư vấn sản phẩm thông minh",
 	},
 ]
 
 // ===== Temperature and Parameter Ranges =====
 export const AI_PARAMETER_RANGES = {
 	temperature: { min: 0, max: 100, default: 70 },
-	top_k: { min: 1, max: 50, default: 5 },
-	max_tokens: { min: 100, max: 8000, default: 5000 },
+	topK: { min: 1, max: 50, default: 5 },
+	maxTokens: { min: 100, max: 4000, default: 1000 },
 } as const
 
 // ===== Chat/Conversation Types =====

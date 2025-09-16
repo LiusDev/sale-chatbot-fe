@@ -1,3 +1,5 @@
+import AgentsLayout from "@/app/(main)/agents/layout"
+import AgentsPage from "@/app/(main)/agents/page"
 import ChannelsLayout from "@/app/(main)/channels/layout"
 import ChannelsPage from "@/app/(main)/channels/page"
 import MainLayout from "@/app/(main)/layout"
@@ -45,6 +47,16 @@ const router = createBrowserRouter([
 							{
 								path: ":groupId/:productId",
 								element: <ProductDetailPage />,
+							},
+						],
+					},
+					{
+						path: "agents",
+						element: <AgentsLayout />,
+						children: [
+							{
+								index: true,
+								element: <AgentsPage />,
 							},
 						],
 					},

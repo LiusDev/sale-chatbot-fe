@@ -1,3 +1,4 @@
+import { AI_MODELS, type AIModel } from "@/types/ai.type"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -105,4 +106,8 @@ export async function processImageFiles(
 	}
 
 	return successful
+}
+
+export const getModelDisplayname = (name: AIModel) => {
+	return AI_MODELS.find((model) => model.name === name)?.displayName || ""
 }

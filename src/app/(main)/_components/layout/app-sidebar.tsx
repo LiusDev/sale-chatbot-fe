@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import {
+	Bot,
 	BotMessageSquare,
 	ChartNoAxesCombined,
 	Package,
@@ -37,6 +38,11 @@ const data = {
 			name: t("navigation.products"),
 			url: "/products",
 			icon: Package,
+		},
+		{
+			name: t("navigation.agents"),
+			url: "/agents",
+			icon: Bot,
 		},
 		{
 			name: t("navigation.playground"),
