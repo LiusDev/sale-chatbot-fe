@@ -121,7 +121,7 @@ function ProductGroupCard({
 			<CardHeader className="pb-3">
 				<div className="flex items-start justify-between">
 					<div className="p-1 rounded-md border shadow-xs bg-background dark:bg-input/30">
-						<Package className="size-6 text-blue-600" />
+						<Package className="size-6 text-blue-600 dark:text-blue-400" />
 					</div>
 
 					<div className="flex gap-1">

@@ -117,7 +117,7 @@ function AIAgentCard({ agent, onEdit, onDelete }: AIAgentCardProps) {
 			<CardHeader className="pb-3">
 				<div className="flex items-center justify-between">
 					<div className="p-1 rounded-md border shadow-xs bg-background dark:bg-input/30">
-						<Bot className="size-6 text-blue-600" />
+						<Bot className="size-6 text-blue-600 dark:text-blue-400" />
 					</div>
 
 					<div className="flex gap-1">
