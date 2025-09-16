@@ -64,7 +64,7 @@ export function ProductsGrid({ groupId, products }: ProductsGridProps) {
 					</div>
 				</div>
 			) : (
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 					{products.map((product) => (
 						<ProductCard
 							key={product.id}
@@ -148,19 +148,19 @@ function ProductCard({ product, onView }: ProductCardProps) {
 				)}
 			</div>
 
-			<CardHeader className="pb-3">
-				<CardTitle className="text-lg line-clamp-1">
+			<CardHeader className="pb-2">
+				<CardTitle className="text-base line-clamp-1">
 					{product.name}
 				</CardTitle>
 				{product.description && (
-					<CardDescription className="line-clamp-2">
+					<CardDescription className="text-sm line-clamp-2">
 						{product.description}
 					</CardDescription>
 				)}
 			</CardHeader>
 
-			<CardContent className="pb-3">
-				<div className="text-2xl font-bold text-primary">
+			<CardContent className="pb-2">
+				<div className="text-lg font-bold text-primary">
 					{Intl.NumberFormat("vi-VN", {
 						style: "currency",
 						currency: "VND",

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import {
 	Card,
 	CardContent,
@@ -10,12 +10,17 @@ import {
 	CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Plus, Package, Edit, Trash2 } from "lucide-react"
+import { Plus, Package, Edit, Trash2, Eye } from "lucide-react"
 import { CreateProductGroupDialog } from "./create-product-group-dialog"
 import { EditProductGroupDialog } from "./edit-product-group-dialog"
 import { DeleteProductGroupDialog } from "./delete-product-group-dialog"
 import type { ProductGroup } from "@/types/products.type"
 import { t } from "@/lib/translations"
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 interface ProductGroupsGridProps {
 	productGroups: ProductGroup[]
@@ -115,38 +120,69 @@ function ProductGroupCard({
 		>
 			<CardHeader className="pb-3">
 				<div className="flex items-start justify-between">
-					<div className="flex-1">
-						<CardTitle className="text-lg">{group.name}</CardTitle>
-						{group.description && (
-							<CardDescription className="mt-1">
-								{group.description}
-							</CardDescription>
-						)}
+					<div className="p-1 rounded-md border shadow-xs bg-background dark:bg-input/30">
+						<Package className="size-6 text-blue-600" />
 					</div>
+
 					<div className="flex gap-1">
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={(e) => {
-								e.stopPropagation()
-								onEdit()
-							}}
-						>
-							<Edit className="h-4 w-4" />
-						</Button>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<Button variant="outline" size="sm" asChild>
+									<Link to={`/products/${group.id}`}>
+										<Eye className="size-4 text-blue-600 dark:text-blue-400" />
+									</Link>
+								</Button>
+							</TooltipTrigger>
+							<TooltipContent>
+								{t("products.viewProductGroup")}
+							</TooltipContent>
+						</Tooltip>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={(e) => {
+										e.stopPropagation()
+										onEdit()
+									}}
+								>
+									<Edit className="size-4 text-green-600 dark:text-green-400" />
+								</Button>
+							</TooltipTrigger>
+							<TooltipContent>
+								{t("products.editProductGroup")}
+							</TooltipContent>
+						</Tooltip>
+
 						{(group.productCount || 0) === 0 && (
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={(e) => {
-									e.stopPropagation()
-									onDelete()
-								}}
-							>
-								<Trash2 className="h-4 w-4 text-red-500" />
-							</Button>
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={(e) => {
+											e.stopPropagation()
+											onDelete()
+										}}
+									>
+										<Trash2 className="h-4 w-4 text-red-500" />
+									</Button>
+								</TooltipTrigger>
+								<TooltipContent>
+									{t("products.deleteProductGroup")}
+								</TooltipContent>
+							</Tooltip>
 						)}
 					</div>
+				</div>
+				<div>
+					<CardTitle className="text-lg">{group.name}</CardTitle>
+					{group.description && (
+						<CardDescription className="mt-1">
+							{group.description}
+						</CardDescription>
+					)}
 				</div>
 			</CardHeader>
 
