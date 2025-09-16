@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Plus, Bot, Edit, Trash2, Brain, Zap } from "lucide-react"
+import { Plus, Bot, Edit, Trash2, Brain, Zap, Play } from "lucide-react"
 import { UpsertAIAgentDialog } from "./upsert-ai-agent-dialog"
 import { DeleteAIAgentDialog } from "./delete-ai-agent-dialog"
 import type { AIAgent } from "@/types/ai.type"
 import { t } from "@/lib/translations"
+import { Link } from "react-router-dom"
 
 interface AIAgentsGridProps {
 	agents: AIAgent[]
@@ -123,6 +124,11 @@ function AIAgentCard({ agent, onEdit, onDelete }: AIAgentCardProps) {
 						)}
 					</div>
 					<div className="flex gap-1">
+						<Button asChild variant="outline" size="sm">
+							<Link to={`/playground?agentId=${agent.id}`}>
+								<Play className="h-4 w-4" />
+							</Link>
+						</Button>
 						<Button variant="outline" size="sm" onClick={onEdit}>
 							<Edit className="h-4 w-4" />
 						</Button>

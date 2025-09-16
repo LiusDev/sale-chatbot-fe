@@ -1,4 +1,5 @@
 import { Loader2, MessageSquare, Bot } from "lucide-react"
+import { t } from "@/lib/translations"
 
 export default function Hydrate() {
 	return (
@@ -19,10 +20,10 @@ export default function Hydrate() {
 
 					<div className="space-y-2">
 						<h1 className="text-2xl font-bold text-foreground">
-							Sale Chatbot
+							{t("app.name")}
 						</h1>
 						<p className="text-sm text-muted-foreground">
-							Initializing your AI assistant...
+							Đang khởi tạo trợ lý AI của bạn...
 						</p>
 					</div>
 				</div>
@@ -40,7 +41,7 @@ export default function Hydrate() {
 							<div className="h-full bg-primary rounded-full animate-pulse w-3/4 transition-all duration-1000" />
 						</div>
 						<p className="text-xs text-muted-foreground">
-							Loading components and data...
+							Đang tải thành phần và dữ liệu...
 						</p>
 					</div>
 				</div>
@@ -50,7 +51,7 @@ export default function Hydrate() {
 					<div className="animate-pulse">
 						<p className="text-sm text-muted-foreground">
 							<span className="inline-block w-2 h-2 bg-primary rounded-full mr-2 animate-pulse"></span>
-							Setting up chat environment
+							Đang thiết lập môi trường trò chuyện
 						</p>
 					</div>
 				</div>
@@ -58,7 +59,7 @@ export default function Hydrate() {
 				{/* Subtle Footer */}
 				<div className="pt-8">
 					<p className="text-xs text-muted-foreground/60">
-						Powered by AI • Built with React
+						Vận hành bởi AI • Xây dựng với React
 					</p>
 				</div>
 			</div>

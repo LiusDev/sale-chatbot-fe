@@ -40,11 +40,15 @@ export const useGetAIAgents = (params: GetAIAgentsParams = {}) => {
 /**
  * Get single AI agent
  */
-export const useGetAIAgent = (params: AIAgentParams) => {
+export const useGetAIAgent = (
+	params: AIAgentParams,
+	options?: { enabled?: boolean }
+) => {
 	return useQuery({
 		queryKey: aiQueryKeys.agent(params.agentId),
 		queryFn: () => aiService.getAIAgent(params),
 		staleTime: 5 * 60 * 1000, // 5 minutes
+		enabled: options?.enabled ?? true,
 	})
 }
 

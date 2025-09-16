@@ -12,4 +12,5 @@ export interface UserData {
 		email: string
 		avatar: string
 	}
+	token: string
 }

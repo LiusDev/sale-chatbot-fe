@@ -13,12 +13,12 @@ export default function ErrorPage() {
 					</h1>
 					<div className="space-y-2">
 						<h2 className="text-3xl md:text-4xl font-bold text-foreground">
-							Page Not Found
+							Không tìm thấy trang
 						</h2>
 						<p className="text-lg text-muted-foreground max-w-md mx-auto leading-relaxed">
-							Sorry, we couldn't find the page you're looking for.
-							It might have been moved, deleted, or you entered
-							the wrong URL.
+							Xin lỗi, chúng tôi không thể tìm thấy trang bạn yêu
+							cầu. Có thể trang đã được di chuyển, xóa hoặc bạn đã
+							nhập sai URL.
 						</p>
 					</div>
 				</div>
@@ -40,7 +40,7 @@ export default function ErrorPage() {
 					<Button asChild size="lg" className="min-w-[160px]">
 						<Link to="/">
 							<Home className="w-4 h-4" />
-							Go to Homepage
+							Về trang chủ
 						</Link>
 					</Button>
 					<Button
@@ -50,14 +50,14 @@ export default function ErrorPage() {
 						className="min-w-[160px]"
 					>
 						<ArrowLeft className="w-4 h-4" />
-						Go Back
+						Quay lại
 					</Button>
 				</div>
 
 				{/* Help Text */}
 				<div className="pt-8 border-t border-border/30">
 					<p className="text-sm text-muted-foreground">
-						If you think this is a mistake, please{" "}
+						Nếu bạn nghĩ đây là lỗi, vui lòng{" "}
 						<a
 							href="#"
 							className="text-primary hover:underline font-medium"
@@ -67,7 +67,7 @@ export default function ErrorPage() {
 								console.log("Contact support clicked")
 							}}
 						>
-							contact our support team
+							liên hệ đội hỗ trợ
 						</a>
 					</p>
 				</div>
