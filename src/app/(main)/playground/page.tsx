@@ -12,6 +12,7 @@ import {
 	ResizablePanel,
 	ResizableHandle,
 } from "@/components/ui/resizable"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Settings, MessageSquare } from "lucide-react"
 
 // Local Components
@@ -250,86 +251,82 @@ export default function PlaygroundPage() {
 	return (
 		<div className="h-full max-h-full">
 			{isMobile ? (
-				// Mobile Layout: Vertical stack with tab-like navigation
-				<div className="flex h-full flex-col">
+				// Mobile Layout: Tabs navigation
+				<Tabs 
+					value={activeMobilePanel} 
+					onValueChange={(value) => setActiveMobilePanel(value as 'config' | 'chat')}
+					className="flex h-full flex-col"
+				>
 					{/* Mobile Navigation */}
-					<div className="flex border-b bg-background">
-						<button
-							className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium transition-colors ${
-								activeMobilePanel === 'config'
-									? 'bg-muted border-b-2 border-primary text-primary'
-									: 'text-muted-foreground hover:text-foreground'
-							}`}
-							onClick={() => setActiveMobilePanel('config')}
+					<TabsList className="grid w-full grid-cols-2 rounded-none h-auto bg-background border-b">
+						<TabsTrigger 
+							value="config" 
+							className="flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium rounded-none data-[state=active]:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-foreground"
 						>
 							<Settings className="h-4 w-4" />
 							Cấu hình
-						</button>
-						<button
-							className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium transition-colors ${
-								activeMobilePanel === 'chat'
-									? 'bg-muted border-b-2 border-primary text-primary'
-									: 'text-muted-foreground hover:text-foreground'
-							}`}
-							onClick={() => setActiveMobilePanel('chat')}
+						</TabsTrigger>
+						<TabsTrigger 
+							value="chat" 
+							className="flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium rounded-none data-[state=active]:bg-muted data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-foreground"
 						>
 							<MessageSquare className="h-4 w-4" />
 							Trò chuyện
-						</button>
-					</div>
+						</TabsTrigger>
+					</TabsList>
 
 					{/* Mobile Panel Content */}
-					<div className="flex-1 overflow-hidden">
-						{activeMobilePanel === 'config' ? (
-							<AgentConfigPanel
-								selectedAgent={selectedAgent}
-								agents={agents}
-								knowledgeSources={knowledgeSources}
-								isLoadingAgent={isLoadingAgent}
-								model={model}
-								systemPrompt={systemPrompt}
-								knowledgeSourceGroupId={knowledgeSourceGroupId}
-								temperature={temperature}
-								topK={topK}
-								maxTokens={maxTokens}
-								temperatureInput={temperatureInput}
-								topKInput={topKInput}
-								maxTokensInput={maxTokensInput}
-								onAgentSelect={handleAgentSelect}
-								onModelChange={setModel}
-								onSystemPromptChange={setSystemPrompt}
-								onKnowledgeSourceChange={setKnowledgeSourceGroupId}
-								onTemperatureChange={setTemperature}
-								onTopKChange={setTopK}
-								onMaxTokensChange={setMaxTokens}
-								onTemperatureInputChange={handleTemperatureInputChange}
-								onTopKInputChange={handleTopKInputChange}
-								onMaxTokensInputChange={handleMaxTokensInputChange}
-								onReset={handleReset}
-								onSave={handleSave}
-								isSaving={updateAgentMutation.isPending}
+					<TabsContent value="config" className="flex-1 overflow-hidden mt-0">
+						<AgentConfigPanel
+							selectedAgent={selectedAgent}
+							agents={agents}
+							knowledgeSources={knowledgeSources}
+							isLoadingAgent={isLoadingAgent}
+							model={model}
+							systemPrompt={systemPrompt}
+							knowledgeSourceGroupId={knowledgeSourceGroupId}
+							temperature={temperature}
+							topK={topK}
+							maxTokens={maxTokens}
+							temperatureInput={temperatureInput}
+							topKInput={topKInput}
+							maxTokensInput={maxTokensInput}
+							onAgentSelect={handleAgentSelect}
+							onModelChange={setModel}
+							onSystemPromptChange={setSystemPrompt}
+							onKnowledgeSourceChange={setKnowledgeSourceGroupId}
+							onTemperatureChange={setTemperature}
+							onTopKChange={setTopK}
+							onMaxTokensChange={setMaxTokens}
+							onTemperatureInputChange={handleTemperatureInputChange}
+							onTopKInputChange={handleTopKInputChange}
+							onMaxTokensInputChange={handleMaxTokensInputChange}
+							onReset={handleReset}
+							onSave={handleSave}
+							isSaving={updateAgentMutation.isPending}
+						/>
+					</TabsContent>
+					
+					<TabsContent value="chat" className="flex-1 overflow-hidden mt-0">
+						{selectedAgent ? (
+							<ChatPanel
+								agent={selectedAgent}
+								status={status}
+								reset={() => setMessages([])}
+								messages={messages}
+								handleSubmit={handleSubmit}
+								stop={stop}
 							/>
 						) : (
-							selectedAgent ? (
-								<ChatPanel
-									agent={selectedAgent}
-									status={status}
-									reset={() => setMessages([])}
-									messages={messages}
-									handleSubmit={handleSubmit}
-									stop={stop}
-								/>
-							) : (
-								<div className="flex items-center justify-center h-full p-4">
-									<div className="text-center text-muted-foreground">
-										<MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
-										<p>Chọn một Chat bot để bắt đầu trò chuyện</p>
-									</div>
+							<div className="flex items-center justify-center h-full p-4">
+								<div className="text-center text-muted-foreground">
+									<MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
+									<p>Chọn một Chat bot để bắt đầu trò chuyện</p>
 								</div>
-							)
+							</div>
 						)}
-					</div>
-				</div>
+					</TabsContent>
+				</Tabs>
 			) : (
 				// Desktop Layout: Horizontal resizable panels
 				<ResizablePanelGroup direction="horizontal" className="h-full">
