@@ -13,6 +13,7 @@ import {
 	ResizableHandle,
 } from "@/components/ui/resizable"
 import { Settings, MessageSquare } from "lucide-react"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 
 // Local Components
 import { AgentSelector } from "./_components/agent-selector"
@@ -37,7 +38,7 @@ export default function PlaygroundPage() {
 	const isMobile = useIsMobile()
 
 	// Mobile panel state: 'config' | 'chat'
-	const [activeMobilePanel, setActiveMobilePanel] = useState<'config' | 'chat'>('config')
+	const [activeMobileTab, setActiveMobileTab] = useState<'config' | 'chat'>('config')
 
 	// States for agent configuration
 	const [selectedAgentId, setSelectedAgentId] = useState<number | null>(
@@ -114,7 +115,7 @@ export default function PlaygroundPage() {
 		
 		// On mobile, switch to chat panel after selecting an agent
 		if (isMobile) {
-			setActiveMobilePanel('chat')
+			setActiveMobileTab('chat')
 		}
 	}
 
@@ -250,86 +251,68 @@ export default function PlaygroundPage() {
 	return (
 		<div className="h-full max-h-full">
 			{isMobile ? (
-				// Mobile Layout: Vertical stack with tab-like navigation
-				<div className="flex h-full flex-col">
-					{/* Mobile Navigation */}
-					<div className="flex border-b bg-background">
-						<button
-							className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium transition-colors ${
-								activeMobilePanel === 'config'
-									? 'bg-muted border-b-2 border-primary text-primary'
-									: 'text-muted-foreground hover:text-foreground'
-							}`}
-							onClick={() => setActiveMobilePanel('config')}
-						>
+				// Mobile Layout: ShadcnUI Tabs
+				<Tabs value={activeMobileTab} onValueChange={v => setActiveMobileTab(v as 'config' | 'chat')} className="flex flex-col h-full">
+					<TabsList className="border-b bg-background">
+						<TabsTrigger value="config" className="flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium">
 							<Settings className="h-4 w-4" />
 							Cấu hình
-						</button>
-						<button
-							className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium transition-colors ${
-								activeMobilePanel === 'chat'
-									? 'bg-muted border-b-2 border-primary text-primary'
-									: 'text-muted-foreground hover:text-foreground'
-							}`}
-							onClick={() => setActiveMobilePanel('chat')}
-						>
+						</TabsTrigger>
+						<TabsTrigger value="chat" className="flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium">
 							<MessageSquare className="h-4 w-4" />
 							Trò chuyện
-						</button>
-					</div>
-
-					{/* Mobile Panel Content */}
-					<div className="flex-1 overflow-hidden">
-						{activeMobilePanel === 'config' ? (
-							<AgentConfigPanel
-								selectedAgent={selectedAgent}
-								agents={agents}
-								knowledgeSources={knowledgeSources}
-								isLoadingAgent={isLoadingAgent}
-								model={model}
-								systemPrompt={systemPrompt}
-								knowledgeSourceGroupId={knowledgeSourceGroupId}
-								temperature={temperature}
-								topK={topK}
-								maxTokens={maxTokens}
-								temperatureInput={temperatureInput}
-								topKInput={topKInput}
-								maxTokensInput={maxTokensInput}
-								onAgentSelect={handleAgentSelect}
-								onModelChange={setModel}
-								onSystemPromptChange={setSystemPrompt}
-								onKnowledgeSourceChange={setKnowledgeSourceGroupId}
-								onTemperatureChange={setTemperature}
-								onTopKChange={setTopK}
-								onMaxTokensChange={setMaxTokens}
-								onTemperatureInputChange={handleTemperatureInputChange}
-								onTopKInputChange={handleTopKInputChange}
-								onMaxTokensInputChange={handleMaxTokensInputChange}
-								onReset={handleReset}
-								onSave={handleSave}
-								isSaving={updateAgentMutation.isPending}
+						</TabsTrigger>
+					</TabsList>
+					<TabsContent value="config" className="flex-1 overflow-hidden">
+						<AgentConfigPanel
+							selectedAgent={selectedAgent}
+							agents={agents}
+							knowledgeSources={knowledgeSources}
+							isLoadingAgent={isLoadingAgent}
+							model={model}
+							systemPrompt={systemPrompt}
+							knowledgeSourceGroupId={knowledgeSourceGroupId}
+							temperature={temperature}
+							topK={topK}
+							maxTokens={maxTokens}
+							temperatureInput={temperatureInput}
+							topKInput={topKInput}
+							maxTokensInput={maxTokensInput}
+							onAgentSelect={handleAgentSelect}
+							onModelChange={setModel}
+							onSystemPromptChange={setSystemPrompt}
+							onKnowledgeSourceChange={setKnowledgeSourceGroupId}
+							onTemperatureChange={setTemperature}
+							onTopKChange={setTopK}
+							onMaxTokensChange={setMaxTokens}
+							onTemperatureInputChange={handleTemperatureInputChange}
+							onTopKInputChange={handleTopKInputChange}
+							onMaxTokensInputChange={handleMaxTokensInputChange}
+							onReset={handleReset}
+							onSave={handleSave}
+							isSaving={updateAgentMutation.isPending}
+						/>
+					</TabsContent>
+					<TabsContent value="chat" className="flex-1 overflow-hidden">
+						{selectedAgent ? (
+							<ChatPanel
+								agent={selectedAgent}
+								status={status}
+								reset={() => setMessages([])}
+								messages={messages}
+								handleSubmit={handleSubmit}
+								stop={stop}
 							/>
 						) : (
-							selectedAgent ? (
-								<ChatPanel
-									agent={selectedAgent}
-									status={status}
-									reset={() => setMessages([])}
-									messages={messages}
-									handleSubmit={handleSubmit}
-									stop={stop}
-								/>
-							) : (
-								<div className="flex items-center justify-center h-full p-4">
-									<div className="text-center text-muted-foreground">
-										<MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
-										<p>Chọn một Chat bot để bắt đầu trò chuyện</p>
-									</div>
+							<div className="flex items-center justify-center h-full p-4">
+								<div className="text-center text-muted-foreground">
+									<MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
+									<p>Chọn một Chat bot để bắt đầu trò chuyện</p>
 								</div>
-							)
+							</div>
 						)}
-					</div>
-				</div>
+					</TabsContent>
+				</Tabs>
 			) : (
 				// Desktop Layout: Horizontal resizable panels
 				<ResizablePanelGroup direction="horizontal" className="h-full">
