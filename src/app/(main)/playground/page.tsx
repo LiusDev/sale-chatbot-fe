@@ -12,6 +12,7 @@ import {
 	ResizablePanel,
 	ResizableHandle,
 } from "@/components/ui/resizable"
+import { Settings, MessageSquare } from "lucide-react"
 
 // Local Components
 import { AgentSelector } from "./_components/agent-selector"
@@ -25,6 +26,7 @@ import {
 	useUpdateAIAgent,
 } from "@/queries/ai.query"
 import { useGetProductGroups } from "@/queries/products.query"
+import { useIsMobile } from "@/hooks/use-mobile"
 // Remove unused import
 import { AI_PARAMETER_RANGES } from "@/types/ai.type"
 import { BE_URL } from "@/lib/constant"
@@ -32,6 +34,10 @@ import { BE_URL } from "@/lib/constant"
 export default function PlaygroundPage() {
 	const [searchParams, setSearchParams] = useSearchParams()
 	const agentId = searchParams.get("agentId")
+	const isMobile = useIsMobile()
+
+	// Mobile panel state: 'config' | 'chat'
+	const [activeMobilePanel, setActiveMobilePanel] = useState<'config' | 'chat'>('config')
 
 	// States for agent configuration
 	const [selectedAgentId, setSelectedAgentId] = useState<number | null>(
@@ -105,6 +111,11 @@ export default function PlaygroundPage() {
 		setSelectedAgentId(agentId)
 		setMessages([])
 		setSearchParams({ agentId: agentId.toString() })
+		
+		// On mobile, switch to chat panel after selecting an agent
+		if (isMobile) {
+			setActiveMobilePanel('chat')
+		}
 	}
 
 	// Handle parameter input changes
@@ -238,55 +249,139 @@ export default function PlaygroundPage() {
 
 	return (
 		<div className="h-full max-h-full">
-			<ResizablePanelGroup direction="horizontal" className="h-full">
-				{/* Configuration Panel */}
-				<ResizablePanel defaultSize={35} minSize={25} maxSize={50}>
-					<AgentConfigPanel
-						selectedAgent={selectedAgent}
-						agents={agents}
-						knowledgeSources={knowledgeSources}
-						isLoadingAgent={isLoadingAgent}
-						model={model}
-						systemPrompt={systemPrompt}
-						knowledgeSourceGroupId={knowledgeSourceGroupId}
-						temperature={temperature}
-						topK={topK}
-						maxTokens={maxTokens}
-						temperatureInput={temperatureInput}
-						topKInput={topKInput}
-						maxTokensInput={maxTokensInput}
-						onAgentSelect={handleAgentSelect}
-						onModelChange={setModel}
-						onSystemPromptChange={setSystemPrompt}
-						onKnowledgeSourceChange={setKnowledgeSourceGroupId}
-						onTemperatureChange={setTemperature}
-						onTopKChange={setTopK}
-						onMaxTokensChange={setMaxTokens}
-						onTemperatureInputChange={handleTemperatureInputChange}
-						onTopKInputChange={handleTopKInputChange}
-						onMaxTokensInputChange={handleMaxTokensInputChange}
-						onReset={handleReset}
-						onSave={handleSave}
-						isSaving={updateAgentMutation.isPending}
-					/>
-				</ResizablePanel>
+			{isMobile ? (
+				// Mobile Layout: Vertical stack with tab-like navigation
+				<div className="flex h-full flex-col">
+					{/* Mobile Navigation */}
+					<div className="flex border-b bg-background">
+						<button
+							className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium transition-colors ${
+								activeMobilePanel === 'config'
+									? 'bg-muted border-b-2 border-primary text-primary'
+									: 'text-muted-foreground hover:text-foreground'
+							}`}
+							onClick={() => setActiveMobilePanel('config')}
+						>
+							<Settings className="h-4 w-4" />
+							Cấu hình
+						</button>
+						<button
+							className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium transition-colors ${
+								activeMobilePanel === 'chat'
+									? 'bg-muted border-b-2 border-primary text-primary'
+									: 'text-muted-foreground hover:text-foreground'
+							}`}
+							onClick={() => setActiveMobilePanel('chat')}
+						>
+							<MessageSquare className="h-4 w-4" />
+							Trò chuyện
+						</button>
+					</div>
 
-				<ResizableHandle withHandle />
-
-				{/* Chat Panel */}
-				<ResizablePanel defaultSize={65}>
-					{selectedAgent ? (
-						<ChatPanel
-							agent={selectedAgent}
-							status={status}
-							reset={() => setMessages([])}
-							messages={messages}
-							handleSubmit={handleSubmit}
-							stop={stop}
+					{/* Mobile Panel Content */}
+					<div className="flex-1 overflow-hidden">
+						{activeMobilePanel === 'config' ? (
+							<AgentConfigPanel
+								selectedAgent={selectedAgent}
+								agents={agents}
+								knowledgeSources={knowledgeSources}
+								isLoadingAgent={isLoadingAgent}
+								model={model}
+								systemPrompt={systemPrompt}
+								knowledgeSourceGroupId={knowledgeSourceGroupId}
+								temperature={temperature}
+								topK={topK}
+								maxTokens={maxTokens}
+								temperatureInput={temperatureInput}
+								topKInput={topKInput}
+								maxTokensInput={maxTokensInput}
+								onAgentSelect={handleAgentSelect}
+								onModelChange={setModel}
+								onSystemPromptChange={setSystemPrompt}
+								onKnowledgeSourceChange={setKnowledgeSourceGroupId}
+								onTemperatureChange={setTemperature}
+								onTopKChange={setTopK}
+								onMaxTokensChange={setMaxTokens}
+								onTemperatureInputChange={handleTemperatureInputChange}
+								onTopKInputChange={handleTopKInputChange}
+								onMaxTokensInputChange={handleMaxTokensInputChange}
+								onReset={handleReset}
+								onSave={handleSave}
+								isSaving={updateAgentMutation.isPending}
+							/>
+						) : (
+							selectedAgent ? (
+								<ChatPanel
+									agent={selectedAgent}
+									status={status}
+									reset={() => setMessages([])}
+									messages={messages}
+									handleSubmit={handleSubmit}
+									stop={stop}
+								/>
+							) : (
+								<div className="flex items-center justify-center h-full p-4">
+									<div className="text-center text-muted-foreground">
+										<MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
+										<p>Chọn một Chat bot để bắt đầu trò chuyện</p>
+									</div>
+								</div>
+							)
+						)}
+					</div>
+				</div>
+			) : (
+				// Desktop Layout: Horizontal resizable panels
+				<ResizablePanelGroup direction="horizontal" className="h-full">
+					{/* Configuration Panel */}
+					<ResizablePanel defaultSize={35} minSize={25} maxSize={50}>
+						<AgentConfigPanel
+							selectedAgent={selectedAgent}
+							agents={agents}
+							knowledgeSources={knowledgeSources}
+							isLoadingAgent={isLoadingAgent}
+							model={model}
+							systemPrompt={systemPrompt}
+							knowledgeSourceGroupId={knowledgeSourceGroupId}
+							temperature={temperature}
+							topK={topK}
+							maxTokens={maxTokens}
+							temperatureInput={temperatureInput}
+							topKInput={topKInput}
+							maxTokensInput={maxTokensInput}
+							onAgentSelect={handleAgentSelect}
+							onModelChange={setModel}
+							onSystemPromptChange={setSystemPrompt}
+							onKnowledgeSourceChange={setKnowledgeSourceGroupId}
+							onTemperatureChange={setTemperature}
+							onTopKChange={setTopK}
+							onMaxTokensChange={setMaxTokens}
+							onTemperatureInputChange={handleTemperatureInputChange}
+							onTopKInputChange={handleTopKInputChange}
+							onMaxTokensInputChange={handleMaxTokensInputChange}
+							onReset={handleReset}
+							onSave={handleSave}
+							isSaving={updateAgentMutation.isPending}
 						/>
-					) : null}
-				</ResizablePanel>
-			</ResizablePanelGroup>
+					</ResizablePanel>
+
+					<ResizableHandle withHandle />
+
+					{/* Chat Panel */}
+					<ResizablePanel defaultSize={65}>
+						{selectedAgent ? (
+							<ChatPanel
+								agent={selectedAgent}
+								status={status}
+								reset={() => setMessages([])}
+								messages={messages}
+								handleSubmit={handleSubmit}
+								stop={stop}
+							/>
+						) : null}
+					</ResizablePanel>
+				</ResizablePanelGroup>
+			)}
 		</div>
 	)
 }
