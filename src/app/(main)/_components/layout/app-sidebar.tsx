@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import {
 	Bot,
@@ -7,10 +5,12 @@ import {
 	ChartNoAxesCombined,
 	Package,
 	Rss,
+	Settings,
 } from "lucide-react"
 
 import { NavItems } from "./nav-items"
 import { NavUser } from "./nav-user"
+import { NavSecondary } from "./nav-secondary"
 import { t } from "@/lib/translations"
 import {
 	Sidebar,
@@ -56,6 +56,13 @@ const data = {
 			icon: Rss,
 		},
 	],
+	navSecondary: [
+		{
+			title: t("navigation.settings"),
+			url: "/settings",
+			icon: Settings,
+		},
+	],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -85,7 +92,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			<SidebarContent>
 				{/* <NavMain items={data.navMain} /> */}
 				<NavItems items={data.navMain} />
-				{/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
+				<NavSecondary items={data.navSecondary} className="mt-auto" />
 			</SidebarContent>
 			<SidebarFooter>
 				<NavUser user={data.user} />

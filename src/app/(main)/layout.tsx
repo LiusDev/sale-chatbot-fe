@@ -5,6 +5,7 @@ import {
 	SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { ReAuthDialog } from "@/components/re-auth-dialog"
+import { Toaster } from "sonner"
 import { Outlet } from "react-router-dom"
 
 export default function MainLayout() {
@@ -41,6 +42,7 @@ export default function MainLayout() {
 				</div>
 			</SidebarInset>
 			<ReAuthDialog />
+			<Toaster />
 		</SidebarProvider>
 	)
 }

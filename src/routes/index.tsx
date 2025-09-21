@@ -10,6 +10,8 @@ import ProductsLayout from "@/app/(main)/products/layout"
 import ProductsPage from "@/app/(main)/products/page"
 import GroupProductsPage from "@/app/(main)/products/[groupId]/page"
 import ProductDetailPage from "@/app/(main)/products/[groupId]/[productId]/page"
+import SettingsLayout from "@/app/(main)/settings/layout"
+import SettingsPage from "@/app/(main)/settings/page"
 import ErrorPage from "@/app/404"
 import LoginPage from "@/app/auth/login/page"
 import Hydrate from "@/app/hydrate"
@@ -71,6 +73,11 @@ const router = createBrowserRouter([
 						path: "channels",
 						element: <ChannelsLayout />,
 						children: [{ index: true, element: <ChannelsPage /> }],
+					},
+					{
+						path: "settings",
+						element: <SettingsLayout />,
+						children: [{ index: true, element: <SettingsPage /> }],
 					},
 				],
 			},

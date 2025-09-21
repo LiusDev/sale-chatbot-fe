@@ -32,6 +32,7 @@ export const translations = {
 		dashboard: "Bảng điều khiển",
 		backToProducts: "Quay lại sản phẩm",
 		backToAgents: "Quay lại Chat bot",
+		settings: "Cài đặt",
 	},
 
 	// AI Agents related
@@ -256,6 +257,52 @@ export const translations = {
 	breadcrumbs: {
 		buildingApplication: "Xây dựng ứng dụng",
 		dataFetching: "Lấy dữ liệu",
+	},
+
+	// Settings
+	settings: {
+		title: "Cài đặt",
+		description: "Quản lý cấu hình ứng dụng và thông tin kết nối",
+		appInfomation: "Thông tin ứng dụng",
+		appConfiguration: "Cấu hình ứng dụng",
+		zaloConfiguration: "Cấu hình Zalo",
+		metaConfiguration: "Cấu hình Meta",
+		metaConfigurationDescription:
+			"Cấu hình kết nối với Facebook Messenger (tùy chọn)",
+		metaFieldsNote:
+			"Lưu ý: Các trường Meta chỉ dùng để cập nhật. Sau khi lưu thành công, các trường sẽ được xóa để bảo mật.",
+		zalo: "Số điện thoại Zalo",
+		shopName: "Tên cửa hàng",
+		metaAccessToken: "Meta Access Token",
+		metaWebhookVerifyKey: "Meta Webhook Verify Key",
+		appInfoDescription: "Cấu hình thông tin ứng dụng",
+		zaloDescription: "Cấu hình thông tin Zalo cho chatbot",
+		shopNameDescription: "Tên cửa hàng hiển thị trong chatbot",
+		metaAccessTokenDescription:
+			"Token truy cập Meta để kết nối với Facebook Messenger (tùy chọn)",
+		metaWebhookVerifyKeyDescription:
+			"Khóa xác minh webhook Meta (tùy chọn)",
+		saveChanges: "Lưu thay đổi",
+		saving: "Đang lưu...",
+		changesSaved: "Đã lưu thay đổi thành công",
+		errorSaving: "Lỗi khi lưu thay đổi",
+		fieldRequired: "Trường này là bắt buộc",
+		invalidFormat: "Định dạng không hợp lệ",
+		showValue: "Hiển thị",
+		hideValue: "Ẩn",
+		copyValue: "Sao chép",
+		valueCopied: "Đã sao chép",
+		confirmReset: "Xác nhận đặt lại",
+		resetToDefault: "Đặt lại về mặc định",
+		resetDescription:
+			"Bạn có chắc chắn muốn đặt lại tất cả cài đặt về giá trị mặc định?",
+		resetting: "Đang đặt lại...",
+		resetSuccess: "Đã đặt lại thành công",
+		errorResetting: "Lỗi khi đặt lại",
+		unsavedChanges: "Bạn có thay đổi chưa được lưu",
+		leaveWithoutSaving: "Rời khỏi trang mà không lưu thay đổi?",
+		stayOnPage: "Ở lại trang",
+		leavePage: "Rời khỏi trang",
 	},
 
 	// App info

@@ -30,3 +30,33 @@ export interface ApiError {
 		}>
 	}
 }
+
+// ===== App Info Types =====
+export interface AppInfo {
+	zalo: string
+	shopName: string
+	metaAccessToken: string
+	metaWebhookVerifyKey: string
+}
+
+export interface AppInfoUpdate {
+	zalo?: string
+	shopName?: string
+	metaAccessToken?: string
+	metaWebhookVerifyKey?: string
+}
+
+export type AppInfoKey = keyof AppInfo
+
+export const APP_INFO_KEYS: AppInfoKey[] = [
+	"zalo",
+	"shopName",
+	"metaAccessToken",
+	"metaWebhookVerifyKey",
+] as const
+
+export interface AppInfoValidationError {
+	message: string
+	allowedKeys: string[]
+	providedKeys: string[]
+}
