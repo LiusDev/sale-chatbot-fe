@@ -1,7 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { MoreHorizontal, Trash2, ExternalLink } from "lucide-react"
+import {
+	MoreHorizontal,
+	Trash2,
+	ExternalLink,
+	MessageSquare,
+} from "lucide-react"
+import { useNavigate } from "react-router-dom"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -28,12 +34,13 @@ interface MetaPageCardProps {
 }
 
 export function MetaPageCard({ page, onRefresh }: MetaPageCardProps) {
+	const navigate = useNavigate()
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 	const deletePageMutation = useDeletePage()
 
 	const handleDelete = async () => {
 		try {
-			await deletePageMutation.mutateAsync(page.page_id)
+			await deletePageMutation.mutateAsync(page.id)
 			onRefresh?.()
 		} catch (error) {
 			console.error("Failed to delete page:", error)
@@ -55,7 +62,10 @@ export function MetaPageCard({ page, onRefresh }: MetaPageCardProps) {
 
 	return (
 		<>
-			<Card className="hover:shadow-md transition-shadow">
+			<Card
+				className="hover:shadow-md transition-shadow cursor-pointer"
+				onClick={() => navigate(`/channels/${page.id}`)}
+			>
 				<CardHeader className="pb-3">
 					<div className="flex items-start justify-between">
 						<div className="space-y-1">
@@ -65,7 +75,7 @@ export function MetaPageCard({ page, onRefresh }: MetaPageCardProps) {
 							<Badge
 								variant="secondary"
 								className={`text-xs ${getCategoryColor(
-									page.category
+									page.category || ""
 								)}`}
 							>
 								{page.category}
@@ -73,25 +83,42 @@ export function MetaPageCard({ page, onRefresh }: MetaPageCardProps) {
 						</div>
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
-								<Button variant="ghost" size="sm">
+								<Button
+									variant="ghost"
+									size="sm"
+									onClick={(e) => e.stopPropagation()}
+								>
 									<MoreHorizontal className="h-4 w-4" />
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align="end">
 								<DropdownMenuItem
-									onClick={() => {
-										// TODO: Implement view page details
+									onClick={(e) => {
+										e.stopPropagation()
+										navigate(`/channels/${page.id}`)
+									}}
+								>
+									<MessageSquare className="mr-2 h-4 w-4" />
+									Quản lý conversations
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									onClick={(e) => {
+										e.stopPropagation()
+										// TODO: Open page in Meta
 										console.log(
-											"View page details:",
-											page.page_id
+											"Open page in Meta:",
+											page.id
 										)
 									}}
 								>
 									<ExternalLink className="mr-2 h-4 w-4" />
-									Xem chi tiết
+									Mở trên Meta
 								</DropdownMenuItem>
 								<DropdownMenuItem
-									onClick={() => setShowDeleteDialog(true)}
+									onClick={(e) => {
+										e.stopPropagation()
+										setShowDeleteDialog(true)
+									}}
 									className="text-red-600"
 								>
 									<Trash2 className="mr-2 h-4 w-4" />
@@ -104,8 +131,11 @@ export function MetaPageCard({ page, onRefresh }: MetaPageCardProps) {
 				<CardContent className="pt-0">
 					<div className="space-y-2">
 						<div className="text-sm text-muted-foreground">
-							<span className="font-medium">ID:</span>{" "}
-							{page.page_id}
+							<span className="font-medium">ID:</span> {page.id}
+						</div>
+						<div className="flex items-center gap-2 text-xs text-muted-foreground">
+							<MessageSquare className="h-3 w-3" />
+							<span>Click để quản lý conversations</span>
 						</div>
 					</div>
 				</CardContent>

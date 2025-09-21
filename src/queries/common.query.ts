@@ -109,3 +109,31 @@ export const useAppInfoWithOptimisticUpdate = () => {
 		mutateWithOptimisticUpdate,
 	}
 }
+
+/**
+ * Hook to generate new webhook verify key
+ * Automatically invalidates and refetches app info queries
+ */
+export const useGenerateWebhookVerifyKey = () => {
+	const queryClient = useQueryClient()
+
+	return useMutation({
+		mutationFn: () => commonService.generateWebhookVerifyKey(),
+		onSuccess: (response) => {
+			// Update the app info with the new webhook verify key
+			queryClient.setQueryData(commonKeys.appInfo(), (old: any) => {
+				if (!old?.success) return old
+				return {
+					...old,
+					data: {
+						...old.data,
+						metaWebhookVerifyKey: response.data,
+					},
+				}
+			})
+		},
+		onError: (error) => {
+			console.error("Failed to generate webhook verify key:", error)
+		},
+	})
+}

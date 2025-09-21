@@ -15,10 +15,19 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
-import { Save, RotateCcw, AlertTriangle, Eye, EyeOff } from "lucide-react"
+import {
+	Save,
+	RotateCcw,
+	AlertTriangle,
+	Eye,
+	EyeOff,
+	RefreshCw,
+	Copy,
+} from "lucide-react"
 import {
 	useAppInfo,
 	useAppInfoWithOptimisticUpdate,
+	useGenerateWebhookVerifyKey,
 } from "@/queries/common.query"
 import { t } from "@/lib/translations"
 
@@ -27,7 +36,7 @@ const settingsSchema = z.object({
 	zalo: z.string().min(1, t("settings.fieldRequired")),
 	shopName: z.string().min(1, t("settings.fieldRequired")),
 	metaAccessToken: z.string().optional(),
-	metaWebhookVerifyKey: z.string().optional(),
+	metaAppSecret: z.string().optional(),
 })
 
 type SettingsFormData = z.infer<typeof settingsSchema>
@@ -39,6 +48,8 @@ export default function SettingsPage() {
 	const { data: appInfo, isLoading, error } = useAppInfo()
 	const { mutateWithOptimisticUpdate, isPending } =
 		useAppInfoWithOptimisticUpdate()
+	const { mutate: generateWebhookKey, isPending: isGeneratingWebhookKey } =
+		useGenerateWebhookVerifyKey()
 
 	const form = useForm<SettingsFormData>({
 		resolver: zodResolver(settingsSchema),
@@ -46,7 +57,7 @@ export default function SettingsPage() {
 			zalo: "",
 			shopName: "",
 			metaAccessToken: "",
-			metaWebhookVerifyKey: "",
+			metaAppSecret: "",
 		},
 	})
 
@@ -58,7 +69,7 @@ export default function SettingsPage() {
 				zalo: data.zalo || "",
 				shopName: data.shopName || "",
 				metaAccessToken: "", // Always start with empty Meta fields
-				metaWebhookVerifyKey: "", // Always start with empty Meta fields
+				metaAppSecret: "", // Always start with empty Meta fields
 			})
 			setHasUnsavedChanges(false)
 		}
@@ -91,15 +102,15 @@ export default function SettingsPage() {
 				updateData.metaAccessToken = data.metaAccessToken
 			}
 
-			if (data.metaWebhookVerifyKey && data.metaWebhookVerifyKey.trim()) {
-				updateData.metaWebhookVerifyKey = data.metaWebhookVerifyKey
+			if (data.metaAppSecret && data.metaAppSecret.trim()) {
+				updateData.metaAppSecret = data.metaAppSecret
 			}
 
 			await mutateWithOptimisticUpdate(updateData)
 
 			// Clear Meta fields after successful update
 			form.setValue("metaAccessToken", "")
-			form.setValue("metaWebhookVerifyKey", "")
+			form.setValue("metaAppSecret", "")
 
 			toast.success(t("settings.changesSaved"))
 			setHasUnsavedChanges(false)
@@ -115,10 +126,31 @@ export default function SettingsPage() {
 				zalo: data.zalo || "",
 				shopName: data.shopName || "",
 				metaAccessToken: "", // Always clear Meta fields on reset
-				metaWebhookVerifyKey: "", // Always clear Meta fields on reset
+				metaAppSecret: "", // Always clear Meta fields on reset
 			})
 			setHasUnsavedChanges(false)
 			toast.success(t("settings.resetSuccess"))
+		}
+	}
+
+	const handleRegenerateWebhookKey = async () => {
+		try {
+			await generateWebhookKey()
+			toast.success(t("settings.webhookKeyRegenerated"))
+		} catch {
+			toast.error(t("settings.webhookKeyRegenerateError"))
+		}
+	}
+
+	const handleCopyWebhookKey = async () => {
+		const webhookKey = appInfo?.data?.metaWebhookVerifyKey
+		if (webhookKey) {
+			try {
+				await navigator.clipboard.writeText(webhookKey)
+				toast.success(t("settings.valueCopied"))
+			} catch {
+				toast.error("Không thể sao chép")
+			}
 		}
 	}
 
@@ -313,27 +345,24 @@ export default function SettingsPage() {
 							</div>
 
 							<div className="space-y-2">
-								<Label htmlFor="metaWebhookVerifyKey">
-									{t("settings.metaWebhookVerifyKey")}{" "}
+								<Label htmlFor="metaAppSecret">
+									{t("settings.metaAppSecret")}{" "}
 									<span className="text-muted-foreground">
 										(tùy chọn)
 									</span>
 								</Label>
 								<div className="relative">
 									<Input
-										id="metaWebhookVerifyKey"
+										id="metaAppSecret"
 										type={
-											showSecrets.metaWebhookVerifyKey
+											showSecrets.metaAppSecret
 												? "text"
 												: "password"
 										}
-										{...form.register(
-											"metaWebhookVerifyKey"
-										)}
-										placeholder="Nhập Meta Webhook Verify Key mới (tùy chọn)"
+										{...form.register("metaAppSecret")}
+										placeholder="Nhập Meta App Secret mới (tùy chọn)"
 										className={
-											form.formState.errors
-												.metaWebhookVerifyKey
+											form.formState.errors.metaAppSecret
 												? "border-destructive pr-10"
 												: "pr-10"
 										}
@@ -344,26 +373,102 @@ export default function SettingsPage() {
 										size="sm"
 										onClick={() =>
 											toggleSecretVisibility(
-												"metaWebhookVerifyKey"
+												"metaAppSecret"
 											)
 										}
 										className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
 									>
-										{showSecrets.metaWebhookVerifyKey ? (
+										{showSecrets.metaAppSecret ? (
 											<EyeOff className="h-4 w-4" />
 										) : (
 											<Eye className="h-4 w-4" />
 										)}
 									</Button>
 								</div>
-								{form.formState.errors.metaWebhookVerifyKey && (
+								{form.formState.errors.metaAppSecret && (
 									<p className="text-sm text-destructive">
 										{
-											form.formState.errors
-												.metaWebhookVerifyKey.message
+											form.formState.errors.metaAppSecret
+												.message
 										}
 									</p>
 								)}
+							</div>
+
+							<div className="space-y-2">
+								<Label htmlFor="metaWebhookVerifyKey">
+									{t("settings.metaWebhookVerifyKey")}
+								</Label>
+								<div className="relative">
+									<Input
+										id="metaWebhookVerifyKey"
+										type={
+											showSecrets.metaWebhookVerifyKey
+												? "text"
+												: "password"
+										}
+										value={
+											appInfo?.data
+												?.metaWebhookVerifyKey || ""
+										}
+										readOnly
+										placeholder="Chưa có khóa webhook"
+										className="pr-32"
+									/>
+									<div className="absolute right-2 top-1/2 -translate-y-1/2 flex gap-1">
+										<Button
+											type="button"
+											variant="ghost"
+											size="sm"
+											onClick={() =>
+												toggleSecretVisibility(
+													"metaWebhookVerifyKey"
+												)
+											}
+											className="h-8 w-8 p-0"
+										>
+											{showSecrets.metaWebhookVerifyKey ? (
+												<EyeOff className="h-4 w-4" />
+											) : (
+												<Eye className="h-4 w-4" />
+											)}
+										</Button>
+										<Button
+											type="button"
+											variant="ghost"
+											size="sm"
+											onClick={handleCopyWebhookKey}
+											disabled={
+												!appInfo?.data
+													?.metaWebhookVerifyKey
+											}
+											className="h-8 w-8 p-0"
+										>
+											<Copy className="h-4 w-4" />
+										</Button>
+										<Button
+											type="button"
+											variant="ghost"
+											size="sm"
+											onClick={handleRegenerateWebhookKey}
+											disabled={isGeneratingWebhookKey}
+											className="h-8 w-8 p-0"
+										>
+											<RefreshCw
+												className={`h-4 w-4 ${
+													isGeneratingWebhookKey
+														? "animate-spin"
+														: ""
+												}`}
+											/>
+										</Button>
+									</div>
+								</div>
+								<p className="text-sm text-muted-foreground">
+									{t(
+										"settings.metaWebhookVerifyKeyDescription"
+									)}
+								</p>
 							</div>
 						</CardContent>
 					</Card>

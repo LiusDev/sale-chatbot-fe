@@ -29,6 +29,16 @@ class CommonService extends BaseApi {
 			})
 			.json<ApiResponse<AppInfo>>()
 	}
+
+	/**
+	 * Generate new webhook verify key
+	 * Automatically creates a new UUID and saves it to database
+	 */
+	async generateWebhookVerifyKey() {
+		return this.api
+			.post(`${GROUP_PREFIX}/webhook-verify-key`)
+			.json<ApiResponse<string>>()
+	}
 }
 
 const commonService = new CommonService()

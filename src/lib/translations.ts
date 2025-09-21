@@ -274,14 +274,21 @@ export const translations = {
 		zalo: "Số điện thoại Zalo",
 		shopName: "Tên cửa hàng",
 		metaAccessToken: "Meta Access Token",
+		metaAppSecret: "Meta App Secret",
 		metaWebhookVerifyKey: "Meta Webhook Verify Key",
 		appInfoDescription: "Cấu hình thông tin ứng dụng",
 		zaloDescription: "Cấu hình thông tin Zalo cho chatbot",
 		shopNameDescription: "Tên cửa hàng hiển thị trong chatbot",
 		metaAccessTokenDescription:
 			"Token truy cập Meta để kết nối với Facebook Messenger (tùy chọn)",
+		metaAppSecretDescription:
+			"App Secret của Meta để xác thực ứng dụng (tùy chọn)",
 		metaWebhookVerifyKeyDescription:
-			"Khóa xác minh webhook Meta (tùy chọn)",
+			"Khóa xác minh webhook Meta (tự động tạo)",
+		regenerateWebhookKey: "Tạo lại khóa",
+		regeneratingWebhookKey: "Đang tạo lại...",
+		webhookKeyRegenerated: "Đã tạo lại khóa webhook thành công",
+		webhookKeyRegenerateError: "Lỗi khi tạo lại khóa webhook",
 		saveChanges: "Lưu thay đổi",
 		saving: "Đang lưu...",
 		changesSaved: "Đã lưu thay đổi thành công",

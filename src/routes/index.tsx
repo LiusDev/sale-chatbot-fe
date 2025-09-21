@@ -17,6 +17,7 @@ import LoginPage from "@/app/auth/login/page"
 import Hydrate from "@/app/hydrate"
 import RootLayout from "@/app/layout"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import ChannelDetailPage from "@/app/(main)/channels/[pageId]/page"
 
 const router = createBrowserRouter([
 	{
@@ -72,7 +73,10 @@ const router = createBrowserRouter([
 					{
 						path: "channels",
 						element: <ChannelsLayout />,
-						children: [{ index: true, element: <ChannelsPage /> }],
+						children: [
+							{ index: true, element: <ChannelsPage /> },
+							{ path: ":pageId", element: <ChannelDetailPage /> },
+						],
 					},
 					{
 						path: "settings",
