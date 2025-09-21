@@ -36,6 +36,7 @@ export interface AppInfo {
 	zalo: string
 	shopName: string
 	metaAccessToken: string
+	metaAppSecret: string
 	metaWebhookVerifyKey: string
 }
 
@@ -43,6 +44,7 @@ export interface AppInfoUpdate {
 	zalo?: string
 	shopName?: string
 	metaAccessToken?: string
+	metaAppSecret?: string
 	metaWebhookVerifyKey?: string
 }
 
@@ -52,6 +54,7 @@ export const APP_INFO_KEYS: AppInfoKey[] = [
 	"zalo",
 	"shopName",
 	"metaAccessToken",
+	"metaAppSecret",
 	"metaWebhookVerifyKey",
 ] as const
 

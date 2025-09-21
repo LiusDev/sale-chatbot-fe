@@ -5,7 +5,7 @@ import {
 	ChartNoAxesCombined,
 	Package,
 	Rss,
-	Settings,
+	Settings2,
 } from "lucide-react"
 
 import { NavItems } from "./nav-items"
@@ -60,7 +60,7 @@ const data = {
 		{
 			title: t("navigation.settings"),
 			url: "/settings",
-			icon: Settings,
+			icon: Settings2,
 		},
 	],
 }
