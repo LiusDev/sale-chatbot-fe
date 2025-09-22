@@ -27,11 +27,13 @@ import {
 	useSyncPageConversations,
 	useStoredPages,
 } from "@/queries/meta.query"
+import { useMetaSSE } from "@/hooks/use-meta-sse"
 
 export default function ChannelDetailPage() {
 	const params = useParams()
 	const navigate = useNavigate()
 	const isMobile = useIsMobile()
+	useMetaSSE({ pageId: params.pageId as string, enabled: !!params.pageId })
 
 	const pageId = params.pageId as string
 	const [selectedConversationId, setSelectedConversationId] =
