@@ -20,7 +20,7 @@ import {
 import { MessageItem } from "./message-item"
 
 // Hooks and types
-import { useConversationWithOptimisticUpdates } from "@/queries/meta.query"
+import { useSendMessageToConversation } from "@/queries/meta.query"
 import type { MetaPageConversationMessageStored } from "@/types/meta.type"
 // import { useConversationEvents } from "@/hooks/use-conversation-events"
 import { toast } from "sonner"
@@ -43,8 +43,8 @@ export const MessagesPanel = ({
 	const isMobile = useIsMobile()
 	const [messageInput, setMessageInput] = useState("")
 
-	const { sendMessageWithOptimisticUpdate, isSending } =
-		useConversationWithOptimisticUpdates(pageId, conversationId)
+	const sendMessage = useSendMessageToConversation()
+	const isSending = sendMessage.isPending
 
 	// // Setup real-time events
 	// const { isConnected } = useConversationEvents({
@@ -71,7 +71,11 @@ export const MessagesPanel = ({
 		setMessageInput("")
 
 		try {
-			await sendMessageWithOptimisticUpdate(message)
+			await sendMessage.mutateAsync({
+				pageId,
+				conversationId,
+				message,
+			})
 		} catch (error) {
 			toast.error("Không thể gửi tin nhắn")
 			console.error("Failed to send message:", error)
