@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
+import { ImageZoom } from "@/components/ui/shadcn-io/image-zoom"
 
 // AI UI Components
 import { Message, MessageContent } from "@/components/ui/shadcn-io/ai/message"
@@ -22,6 +23,20 @@ export const MessageItem = ({ message, pageId }: MessageItemProps) => {
 	const isFromPage = fromData.id === pageId
 	const isOptimistic = (message as any)._optimistic
 
+	// Parse attachments (stored as JSON string or object or null)
+	let attachmentsData: any[] | null = null
+	try {
+		if (message.attachments) {
+			const raw =
+				typeof message.attachments === "string"
+					? JSON.parse(message.attachments)
+					: message.attachments
+			attachmentsData = raw?.data || null
+		}
+	} catch {
+		attachmentsData = null
+	}
+
 	// Format timestamp
 	const formatTime = (timestamp: string) => {
 		const date = new Date(timestamp)
@@ -42,6 +57,52 @@ export const MessageItem = ({ message, pageId }: MessageItemProps) => {
 						</p>
 					</div>
 
+					{/* Attachments */}
+					{attachmentsData && attachmentsData.length > 0 && (
+						<div className="mt-2 grid gap-2">
+							{attachmentsData.map((item) => {
+								const mime: string | undefined = item?.mime_type
+								if (!mime) return null
+
+								if (mime.startsWith("image/")) {
+									const src =
+										item?.image_data?.url ||
+										item?.image_data?.preview_url
+									if (!src) return null
+									return (
+										<ImageZoom key={item.id}>
+											<img
+												src={src}
+												alt={
+													item?.name ||
+													"image attachment"
+												}
+												className="max-h-80 w-auto rounded border"
+											/>
+										</ImageZoom>
+									)
+								}
+
+								if (mime.startsWith("video/")) {
+									const src = item?.video_data?.url
+									const poster = item?.video_data?.preview_url
+									if (!src) return null
+									return (
+										<video
+											key={item.id}
+											controls
+											className="max-h-80 w-auto rounded border"
+											poster={poster}
+											src={src}
+										/>
+									)
+								}
+
+								return null
+							})}
+						</div>
+					)}
+
 					{/* Message metadata */}
 					<div className="flex items-center justify-between text-xs text-muted-foreground">
 						<div className="flex items-center gap-2">
@@ -53,8 +114,8 @@ export const MessageItem = ({ message, pageId }: MessageItemProps) => {
 							)}
 						</div>
 
-						{/* Attachments indicator */}
-						{message.attachments && (
+						{/* Attachments indicator (optional) */}
+						{attachmentsData && attachmentsData.length > 0 && (
 							<Badge variant="outline" className="text-xs">
 								Attachment
 							</Badge>
