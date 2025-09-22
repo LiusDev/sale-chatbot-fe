@@ -62,10 +62,36 @@ export const MessagesPanel = ({
 	// 	},
 	// })
 
+	// Determine if last end-user message is older than 24 hours
+	const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000
+	const lastEndUserMessageTimeMs = (() => {
+		let latest = 0
+		for (const message of messages) {
+			try {
+				const fromObj = JSON.parse(message.from) as {
+					id?: string
+					name?: string
+				}
+				// Consider end-user messages as those not sent by the page itself
+				if (fromObj?.id && fromObj.id !== pageId) {
+					const t = new Date(message.created_time).getTime()
+					if (!Number.isNaN(t) && t > latest) latest = t
+				}
+			} catch {
+				// ignore malformed from field
+			}
+		}
+		return latest || 0
+	})()
+
+	const isUserInactiveOver24h = lastEndUserMessageTimeMs
+		? Date.now() - lastEndUserMessageTimeMs > TWENTY_FOUR_HOURS_MS
+		: false
+
 	// Handle message sending
 	const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		if (!messageInput.trim() || isSending) return
+		if (!messageInput.trim() || isSending || isUserInactiveOver24h) return
 
 		const message = messageInput.trim()
 		setMessageInput("")
@@ -196,17 +222,27 @@ export const MessagesPanel = ({
 
 			{/* Message Input */}
 			<div className="border-t p-4">
+				{isUserInactiveOver24h && (
+					<div className="mb-2 text-xs text-muted-foreground">
+						Tin nhắn cuối cùng từ khách đã quá 24 giờ. Không thể gửi
+						trả lời.
+					</div>
+				)}
 				<PromptInput onSubmit={handleSendMessage} className="w-full">
 					<PromptInputTextarea
 						value={messageInput}
 						onChange={(e) => setMessageInput(e.target.value)}
 						placeholder="Type your message... (Press 'm' to focus)"
-						disabled={isSending}
+						disabled={isSending || isUserInactiveOver24h}
 						className="min-h-[60px] max-h-[120px]"
 					/>
 					<div className="flex items-center justify-end p-2">
 						<PromptInputSubmit
-							disabled={!messageInput.trim() || isSending}
+							disabled={
+								!messageInput.trim() ||
+								isSending ||
+								isUserInactiveOver24h
+							}
 						>
 							{isSending ? (
 								<Loader2 className="h-4 w-4 animate-spin" />
