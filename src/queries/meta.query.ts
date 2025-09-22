@@ -552,3 +552,137 @@ export const useConversationWithOptimisticUpdates = (
 		isSending: sendMessageMutation.isPending,
 	}
 }
+
+// ===== Agent Management Query Hooks =====
+
+/**
+ * Hook to assign an agent to a Meta page
+ * Automatically invalidates and refetches related queries
+ */
+export const useAssignAgentToPage = () => {
+	const queryClient = useQueryClient()
+
+	return useMutation({
+		mutationFn: ({
+			pageId,
+			agentId,
+		}: {
+			pageId: string
+			agentId: number
+		}) => metaService.assignAgentToPage({ pageId }, { agentId }),
+		onSuccess: (_, { pageId }) => {
+			// Invalidate page conversations to refresh agent info
+			queryClient.invalidateQueries({
+				queryKey: metaKeys.pageConversations(pageId),
+			})
+			// Also invalidate stored pages to update page info
+			queryClient.invalidateQueries({
+				queryKey: metaKeys.pages(),
+			})
+		},
+		onError: (error) => {
+			console.error("Failed to assign agent to page:", error)
+		},
+	})
+}
+
+/**
+ * Hook to update agent mode for a conversation
+ * Automatically invalidates and refetches conversation queries
+ */
+export const useUpdateAgentMode = () => {
+	const queryClient = useQueryClient()
+
+	return useMutation({
+		mutationFn: ({
+			pageId,
+			conversationId,
+			agentMode,
+		}: {
+			pageId: string
+			conversationId: string
+			agentMode: "auto" | "manual"
+		}) =>
+			metaService.updateAgentMode(
+				{ pageId, conversationId },
+				{ agentMode }
+			),
+		onSuccess: (_, { pageId, conversationId }) => {
+			// Invalidate conversation messages to refresh mode info
+			queryClient.invalidateQueries({
+				queryKey: metaKeys.conversationMessages(pageId, conversationId),
+			})
+			// Invalidate page conversations to update conversation list
+			queryClient.invalidateQueries({
+				queryKey: metaKeys.pageConversations(pageId),
+			})
+		},
+		onError: (error) => {
+			console.error("Failed to update agent mode:", error)
+		},
+	})
+}
+
+/**
+ * Hook to update agent mode with optimistic updates
+ * Provides immediate UI feedback while API call is in progress
+ */
+export const useUpdateAgentModeWithOptimisticUpdate = () => {
+	const queryClient = useQueryClient()
+	const updateModeMutation = useUpdateAgentMode()
+
+	const updateModeWithOptimisticUpdate = ({
+		pageId,
+		conversationId,
+		agentMode,
+	}: {
+		pageId: string
+		conversationId: string
+		agentMode: "auto" | "manual"
+	}) => {
+		// Cancel outgoing refetches
+		queryClient.cancelQueries({
+			queryKey: metaKeys.pageConversations(pageId),
+		})
+
+		// Snapshot the previous values
+		const previousConversations = queryClient.getQueryData(
+			metaKeys.pageConversations(pageId)
+		)
+
+		// Optimistically update the conversation mode
+		queryClient.setQueryData(
+			metaKeys.pageConversations(pageId),
+			(old: any) => {
+				if (!old?.success) return old
+				return {
+					...old,
+					data: old.data.map((conversation: any) =>
+						conversation.id === conversationId
+							? { ...conversation, agentmode: agentMode }
+							: conversation
+					),
+				}
+			}
+		)
+
+		// Update the mode
+		return updateModeMutation.mutateAsync(
+			{ pageId, conversationId, agentMode },
+			{
+				onError: () => {
+					// Rollback on error
+					queryClient.setQueryData(
+						metaKeys.pageConversations(pageId),
+						previousConversations
+					)
+				},
+			}
+		)
+	}
+
+	return {
+		...updateModeMutation,
+		updateModeWithOptimisticUpdate,
+	}
+}

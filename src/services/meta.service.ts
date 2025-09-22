@@ -14,6 +14,12 @@ import type {
 	GetPageConversationsParams,
 	GetConversationMessagesParams,
 	SendMessageParams,
+	AssignAgentRequest,
+	AssignAgentResponse,
+	UpdateAgentModeRequest,
+	UpdateAgentModeResponse,
+	AssignAgentParams,
+	UpdateAgentModeParams,
 } from "@/types/meta.type"
 import { BaseApi } from "./base-api"
 
@@ -190,6 +196,43 @@ class MetaService extends BaseApi {
 				}
 			)
 			.json<SendMessageResponse>()
+	}
+
+	// ===== Agent Management =====
+
+	/**
+	 * Assign an agent to a Meta page
+	 * @param params - Parameters containing pageId
+	 * @param agentData - The agent assignment data
+	 */
+	async assignAgentToPage(
+		params: AssignAgentParams,
+		agentData: AssignAgentRequest
+	) {
+		return this.api
+			.put(`${GROUP_PREFIX}/pages/${params.pageId}/assign-agent`, {
+				json: agentData,
+			})
+			.json<AssignAgentResponse>()
+	}
+
+	/**
+	 * Update agent mode for a conversation
+	 * @param params - Parameters containing pageId and conversationId
+	 * @param modeData - The agent mode data
+	 */
+	async updateAgentMode(
+		params: UpdateAgentModeParams,
+		modeData: UpdateAgentModeRequest
+	) {
+		return this.api
+			.put(
+				`${GROUP_PREFIX}/pages/${params.pageId}/${params.conversationId}/agent-mode`,
+				{
+					json: modeData,
+				}
+			)
+			.json<UpdateAgentModeResponse>()
 	}
 }
 

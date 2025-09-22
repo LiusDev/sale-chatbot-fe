@@ -1,7 +1,9 @@
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, RefreshCw, Users } from "lucide-react"
-import { MetaPage } from "@/types/meta.type"
+import { ArrowLeft, RefreshCw, Users, Bot } from "lucide-react"
+import { type MetaPage } from "@/types/meta.type"
+import { AssignAgentModal } from "./assign-agent-modal"
 
 interface ChannelHeaderProps {
 	page?: MetaPage
@@ -18,6 +20,8 @@ export const ChannelHeader = ({
 	onSync,
 	isSyncing,
 }: ChannelHeaderProps) => {
+	const [isAssignAgentModalOpen, setIsAssignAgentModalOpen] = useState(false)
+
 	return (
 		<div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<div className="container mx-auto px-4 py-4">
@@ -45,9 +49,18 @@ export const ChannelHeader = ({
 									>
 										{page?.category || "Unknown"}
 									</Badge>
+									{page?.agent && (
+										<Badge
+											variant="outline"
+											className="text-xs flex items-center gap-1"
+										>
+											<Bot className="h-3 w-3" />
+											{page.agent.name}
+										</Badge>
+									)}
 									<div className="flex items-center gap-1 text-sm text-muted-foreground">
 										<Users className="h-3 w-3" />
-										{conversationsCount} conversations
+										{conversationsCount} cuộc hội thoại
 									</div>
 								</div>
 							</div>
@@ -56,6 +69,15 @@ export const ChannelHeader = ({
 
 					{/* Right side - Actions */}
 					<div className="flex items-center gap-2">
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={() => setIsAssignAgentModalOpen(true)}
+							className="shrink-0"
+						>
+							<Bot className="mr-2 h-4 w-4" />
+							{page?.agent ? "Đổi Chat bot" : "Gán Chat bot"}
+						</Button>
 						<Button
 							variant="outline"
 							size="sm"
@@ -68,11 +90,18 @@ export const ChannelHeader = ({
 									isSyncing ? "animate-spin" : ""
 								}`}
 							/>
-							{isSyncing ? "Syncing..." : "Sync Conversations"}
+							{isSyncing ? "Đang đồng bộ..." : "Đồng bộ tin nhắn"}
 						</Button>
 					</div>
 				</div>
 			</div>
+
+			{/* Assign Agent Modal */}
+			<AssignAgentModal
+				page={page}
+				isOpen={isAssignAgentModalOpen}
+				onClose={() => setIsAssignAgentModalOpen(false)}
+			/>
 		</div>
 	)
 }

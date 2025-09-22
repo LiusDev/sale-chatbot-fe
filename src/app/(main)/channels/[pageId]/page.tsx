@@ -206,6 +206,7 @@ export default function ChannelDetailPage() {
 								isLoading={isLoadingConversations}
 								error={conversationsError}
 								onRefresh={refetchConversations}
+								pageId={pageId}
 							/>
 						</TabsContent>
 
@@ -255,6 +256,7 @@ export default function ChannelDetailPage() {
 								isLoading={isLoadingConversations}
 								error={conversationsError}
 								onRefresh={refetchConversations}
+								pageId={pageId}
 							/>
 						</ResizablePanel>
 

@@ -30,6 +30,19 @@ export interface MetaPage {
 	name: string
 	access_token?: string
 	category?: string
+	agent_id?: number
+	agent?: {
+		id: number
+		name: string
+		description?: string
+		model: string
+		system_prompt: string
+		knowledge_source_group_id?: number
+		top_k: number
+		temperature: number
+		max_tokens: number
+		created_by: number
+	}
 }
 
 // Request/Response Types for API calls
@@ -265,6 +278,45 @@ export interface GetConversationMessagesParams {
 }
 
 export interface SendMessageParams {
+	pageId: string
+	conversationId: string
+}
+
+// ===== Agent Management Types =====
+
+// Assign Agent Request
+export interface AssignAgentRequest {
+	agentId: number
+}
+
+// Assign Agent Response
+export interface AssignAgentResponse {
+	success: true
+	data: {
+		message: string
+	}
+}
+
+// Update Agent Mode Request
+export interface UpdateAgentModeRequest {
+	agentMode: "auto" | "manual"
+}
+
+// Update Agent Mode Response
+export interface UpdateAgentModeResponse {
+	success: true
+	data: {
+		message: string
+	}
+}
+
+// Agent Assignment Parameters
+export interface AssignAgentParams {
+	pageId: string
+}
+
+// Agent Mode Update Parameters
+export interface UpdateAgentModeParams {
 	pageId: string
 	conversationId: string
 }
