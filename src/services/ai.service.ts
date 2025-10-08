@@ -9,6 +9,10 @@ import type {
 	// Chat types
 	SendMessageRequest,
 	SendMessageResponse,
+
+	// Enhance Prompt types
+	EnhanceSystemPromptRequest,
+	EnhanceSystemPromptResponse,
 } from "@/types/ai.type"
 import type { ApiResponse } from "@/types/common.type"
 import { BaseApi } from "./base-api"
@@ -108,6 +112,18 @@ class AIService extends BaseApi {
 		}
 
 		return response.body
+	}
+
+	// ===== Enhance System Prompt =====
+
+	/**
+	 * Enhance a system prompt using AI
+	 * POST /ai/enhance-system-prompt
+	 */
+	async enhanceSystemPrompt(data: EnhanceSystemPromptRequest) {
+		return this.api
+			.post(`${AI_PREFIX}/enhance-system-prompt`, { json: data })
+			.json<EnhanceSystemPromptResponse>()
 	}
 }
 

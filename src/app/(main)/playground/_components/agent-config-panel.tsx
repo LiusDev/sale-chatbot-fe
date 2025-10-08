@@ -34,11 +34,14 @@ import {
 	Save,
 	Settings,
 	Loader2,
+	Sparkles,
 } from "lucide-react"
 import { AI_MODELS, AI_PARAMETER_RANGES } from "@/types/ai.type"
 import type { AIAgent } from "@/types/ai.type"
 import type { ProductGroup } from "@/types/products.type"
 import { t } from "@/lib/translations"
+import { useEnhanceSystemPrompt } from "@/queries/ai.query"
+import { toast } from "sonner"
 
 interface AgentConfigPanelProps {
 	selectedAgent: AIAgent | undefined
@@ -98,6 +101,32 @@ export function AgentConfigPanel({
 	isSaving,
 }: AgentConfigPanelProps) {
 	const [isAgentSelectOpen, setIsAgentSelectOpen] = useState(false)
+	const [isEnhancing, setIsEnhancing] = useState(false)
+	const enhancePrompt = useEnhanceSystemPrompt()
+
+	const handleEnhancePrompt = async () => {
+		if (!systemPrompt.trim()) {
+			toast.error("Vui lòng nhập hướng dẫn hệ thống trước khi cải tiến")
+			return
+		}
+
+		setIsEnhancing(true)
+		try {
+			const result = await enhancePrompt.mutateAsync({
+				prompt: systemPrompt,
+			})
+			onSystemPromptChange(result.enhancedPrompt)
+			toast.success("Đã cải tiến hướng dẫn hệ thống thành công!")
+		} catch (error) {
+			toast.error(
+				error instanceof Error
+					? error.message
+					: "Không thể cải tiến hướng dẫn hệ thống"
+			)
+		} finally {
+			setIsEnhancing(false)
+		}
+	}
 
 	const handleAgentSelect = (agentId: number) => {
 		onAgentSelect(agentId)
@@ -275,7 +304,30 @@ export function AgentConfigPanel({
 
 						{/* System Prompt */}
 						<div className="space-y-2">
-							<Label>{t("agents.systemPrompt")}</Label>
+							<div className="flex items-center justify-between">
+								<Label>{t("agents.systemPrompt")}</Label>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={handleEnhancePrompt}
+									disabled={
+										isEnhancing || !systemPrompt.trim()
+									}
+									className="h-8"
+								>
+									{isEnhancing ? (
+										<>
+											<Loader2 className="mr-2 h-3 w-3 animate-spin" />
+											Đang cải tiến...
+										</>
+									) : (
+										<>
+											<Sparkles className="mr-2 h-3 w-3" />
+											Cải tiến hướng dẫn
+										</>
+									)}
+								</Button>
+							</div>
 							<Textarea
 								value={systemPrompt}
 								onChange={(e) =>

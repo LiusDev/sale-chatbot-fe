@@ -97,3 +97,12 @@ export interface SendMessageResponse {
 	message: ChatMessage
 	sessionId: string
 }
+
+// ===== Enhance System Prompt Types =====
+export interface EnhanceSystemPromptRequest {
+	prompt: string
+}
+
+export interface EnhanceSystemPromptResponse {
+	enhancedPrompt: string
+}

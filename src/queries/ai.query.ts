@@ -8,6 +8,9 @@ import type {
 
 	// Chat types
 	SendMessageRequest,
+
+	// Enhance Prompt types
+	EnhanceSystemPromptRequest,
 } from "@/types/ai.type"
 import aiService from "@/services/ai.service"
 
@@ -188,4 +191,16 @@ export const usePrefetchAIAgent = () => {
 			staleTime: 5 * 60 * 1000,
 		})
 	}
+}
+
+// ===== Enhance System Prompt =====
+
+/**
+ * Enhance system prompt mutation
+ */
+export const useEnhanceSystemPrompt = () => {
+	return useMutation({
+		mutationFn: (data: EnhanceSystemPromptRequest) =>
+			aiService.enhanceSystemPrompt(data),
+	})
 }

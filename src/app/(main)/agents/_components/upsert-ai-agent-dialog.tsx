@@ -51,12 +51,16 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Slider } from "@/components/ui/slider"
-import { useCreateAIAgent, useUpdateAIAgent } from "@/queries/ai.query"
+import {
+	useCreateAIAgent,
+	useUpdateAIAgent,
+	useEnhanceSystemPrompt,
+} from "@/queries/ai.query"
 import { useGetProductGroups } from "@/queries/products.query"
 import { AI_MODELS, AI_PARAMETER_RANGES, type AIAgent } from "@/types/ai.type"
 import { toast } from "sonner"
 import { t } from "@/lib/translations"
-import { Check, ChevronsUpDown } from "lucide-react"
+import { Check, ChevronsUpDown, Sparkles, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const aiAgentSchema = z.object({
@@ -88,8 +92,10 @@ export function UpsertAIAgentDialog({
 }: UpsertAIAgentDialogProps) {
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [knowledgeSourceOpen, setKnowledgeSourceOpen] = useState(false)
+	const [isEnhancing, setIsEnhancing] = useState(false)
 	const createAIAgent = useCreateAIAgent()
 	const updateAIAgent = useUpdateAIAgent()
+	const enhancePrompt = useEnhanceSystemPrompt()
 	const { data: productGroupsResponse } = useGetProductGroups()
 	const productGroups = productGroupsResponse?.data || []
 
@@ -180,6 +186,31 @@ export function UpsertAIAgentDialog({
 			form.reset()
 		}
 		onOpenChange(newOpen)
+	}
+
+	const handleEnhancePrompt = async () => {
+		const currentPrompt = form.getValues("systemPrompt")
+		if (!currentPrompt.trim()) {
+			toast.error("Vui lòng nhập hướng dẫn hệ thống trước khi cải tiến")
+			return
+		}
+
+		setIsEnhancing(true)
+		try {
+			const result = await enhancePrompt.mutateAsync({
+				prompt: currentPrompt,
+			})
+			form.setValue("systemPrompt", result.enhancedPrompt)
+			toast.success("Đã cải tiến hướng dẫn hệ thống thành công!")
+		} catch (error) {
+			toast.error(
+				error instanceof Error
+					? error.message
+					: "Không thể cải tiến hướng dẫn hệ thống"
+			)
+		} finally {
+			setIsEnhancing(false)
+		}
 	}
 
 	return (
@@ -431,9 +462,34 @@ export function UpsertAIAgentDialog({
 							name="systemPrompt"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										{t("agents.systemPrompt")}
-									</FormLabel>
+									<div className="flex items-center justify-between">
+										<FormLabel>
+											{t("agents.systemPrompt")}
+										</FormLabel>
+										<Button
+											type="button"
+											variant="outline"
+											size="sm"
+											onClick={handleEnhancePrompt}
+											disabled={
+												isEnhancing ||
+												!field.value?.trim()
+											}
+											className="h-8"
+										>
+											{isEnhancing ? (
+												<>
+													<Loader2 className="mr-2 h-3 w-3 animate-spin" />
+													Đang cải tiến...
+												</>
+											) : (
+												<>
+													<Sparkles className="mr-2 h-3 w-3" />
+													Cải tiến hướng dẫn
+												</>
+											)}
+										</Button>
+									</div>
 									<FormControl>
 										<Textarea
 											placeholder={t(
