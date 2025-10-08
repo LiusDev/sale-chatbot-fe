@@ -77,7 +77,7 @@ export function DeleteAIAgentDialog({
 							<ul className="list-disc pl-4 space-y-1">
 								<li>Tên: {agent.name}</li>
 								<li>Model: {agent.model}</li>
-								<li>System prompt và cấu hình</li>
+								<li>Hướng dẫn và cấu hình</li>
 								{agent.knowledge_source_name && (
 									<li>
 										Nguồn tri thức:{" "}

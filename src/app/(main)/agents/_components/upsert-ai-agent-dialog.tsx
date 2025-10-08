@@ -70,7 +70,7 @@ const aiAgentSchema = z.object({
 		.max(100, t("validation.nameTooLong")),
 	description: z.string().optional(),
 	model: z.enum(AI_MODELS.map((model) => model.name)),
-	systemPrompt: z.string().min(1, "System prompt là bắt buộc"),
+	systemPrompt: z.string().min(1, " là bắt buộc"),
 	knowledgeSourceGroupId: z.number().optional(),
 	temperature: z.number().min(0).max(100).optional(),
 	topK: z.number().min(1).max(50).optional(),
