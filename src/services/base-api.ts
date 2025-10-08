@@ -26,6 +26,7 @@ export class BaseApi {
 			prefixUrl: finalBaseUrl,
 			headers,
 			credentials: "include", // Enable cookies for cross-origin requests
+			timeout: 60000, // 60 seconds timeout
 			hooks: {
 				afterResponse: [
 					async (_req, _opts, res) => {
