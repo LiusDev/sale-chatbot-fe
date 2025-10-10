@@ -273,12 +273,14 @@ export const translations = {
 			"Lưu ý: Các trường Meta chỉ dùng để cập nhật. Sau khi lưu thành công, các trường sẽ được xóa để bảo mật.",
 		zalo: "Số điện thoại Zalo",
 		shopName: "Tên cửa hàng",
+		shopAddress: "Địa chỉ cửa hàng",
 		metaAccessToken: "Meta Access Token",
 		metaAppSecret: "Meta App Secret",
 		metaWebhookVerifyKey: "Meta Webhook Verify Key",
 		appInfoDescription: "Cấu hình thông tin ứng dụng",
 		zaloDescription: "Cấu hình thông tin Zalo cho chatbot",
 		shopNameDescription: "Tên cửa hàng hiển thị trong chatbot",
+		shopAddressDescription: "Địa chỉ cửa hàng hiển thị trong chatbot",
 		metaAccessTokenDescription:
 			"Token truy cập Meta để kết nối với Facebook Messenger (tùy chọn)",
 		metaAppSecretDescription:

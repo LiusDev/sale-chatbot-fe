@@ -35,6 +35,7 @@ import { t } from "@/lib/translations"
 const settingsSchema = z.object({
 	zalo: z.string().min(1, t("settings.fieldRequired")),
 	shopName: z.string().min(1, t("settings.fieldRequired")),
+	shopAddress: z.string().min(1, t("settings.fieldRequired")),
 	metaAccessToken: z.string().optional(),
 	metaAppSecret: z.string().optional(),
 })
@@ -56,6 +57,7 @@ export default function SettingsPage() {
 		defaultValues: {
 			zalo: "",
 			shopName: "",
+			shopAddress: "",
 			metaAccessToken: "",
 			metaAppSecret: "",
 		},
@@ -68,6 +70,7 @@ export default function SettingsPage() {
 			form.reset({
 				zalo: data.zalo || "",
 				shopName: data.shopName || "",
+				shopAddress: data.shopAddress || "",
 				metaAccessToken: "", // Always start with empty Meta fields
 				metaAppSecret: "", // Always start with empty Meta fields
 			})
@@ -96,6 +99,7 @@ export default function SettingsPage() {
 			const updateData: Record<string, string> = {
 				zalo: data.zalo,
 				shopName: data.shopName,
+				shopAddress: data.shopAddress,
 			}
 
 			if (data.metaAccessToken && data.metaAccessToken.trim()) {
@@ -125,6 +129,7 @@ export default function SettingsPage() {
 			form.reset({
 				zalo: data.zalo || "",
 				shopName: data.shopName || "",
+				shopAddress: data.shopAddress || "",
 				metaAccessToken: "", // Always clear Meta fields on reset
 				metaAppSecret: "", // Always clear Meta fields on reset
 			})
@@ -251,6 +256,29 @@ export default function SettingsPage() {
 								{form.formState.errors.shopName && (
 									<p className="text-sm text-destructive">
 										{form.formState.errors.shopName.message}
+									</p>
+								)}
+							</div>
+							<div className="space-y-2">
+								<Label htmlFor="shopAddress">
+									{t("settings.shopAddress")}
+								</Label>
+								<Input
+									id="shopAddress"
+									{...form.register("shopAddress")}
+									placeholder="Nhập địa chỉ cửa hàng"
+									className={
+										form.formState.errors.shopAddress
+											? "border-destructive"
+											: ""
+									}
+								/>
+								{form.formState.errors.shopAddress && (
+									<p className="text-sm text-destructive">
+										{
+											form.formState.errors.shopAddress
+												.message
+										}
 									</p>
 								)}
 							</div>

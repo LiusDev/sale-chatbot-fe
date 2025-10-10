@@ -35,6 +35,7 @@ export interface ApiError {
 export interface AppInfo {
 	zalo: string
 	shopName: string
+	shopAddress: string
 	metaAccessToken: string
 	metaAppSecret: string
 	metaWebhookVerifyKey: string
@@ -43,6 +44,7 @@ export interface AppInfo {
 export interface AppInfoUpdate {
 	zalo?: string
 	shopName?: string
+	shopAddress?: string
 	metaAccessToken?: string
 	metaAppSecret?: string
 	metaWebhookVerifyKey?: string
