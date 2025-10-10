@@ -11,7 +11,7 @@ export default function AgentsPage() {
 		error,
 	} = useGetAIAgents({
 		page: 1,
-		limit: 20,
+		limit: 50,
 	})
 
 	const agents = response?.data || []

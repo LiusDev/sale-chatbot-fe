@@ -11,7 +11,7 @@ export default function ProductsPage() {
 		error,
 	} = useGetProductGroups({
 		page: 1,
-		limit: 20,
+		limit: 50,
 	})
 
 	const productGroups = response?.data || []
@@ -36,10 +36,10 @@ export default function ProductsPage() {
 				<div className="flex items-center justify-between mb-6">
 					<div>
 						<h1 className="text-3xl font-bold tracking-tight">
-							{t('products.title')}
+							{t("products.title")}
 						</h1>
 						<p className="text-muted-foreground">
-							{t('products.description')}
+							{t("products.description")}
 						</p>
 					</div>
 				</div>
@@ -47,12 +47,12 @@ export default function ProductsPage() {
 					<div className="text-center">
 						<Package className="mx-auto h-12 w-12 text-muted-foreground" />
 						<h3 className="mt-4 text-lg font-semibold">
-							{t('errors.failedToLoadProductGroups')}
+							{t("errors.failedToLoadProductGroups")}
 						</h3>
 						<p className="text-muted-foreground">
 							{error instanceof Error
 								? error.message
-								: t('errors.somethingWentWrong')}
+								: t("errors.somethingWentWrong")}
 						</p>
 					</div>
 				</div>
@@ -65,10 +65,10 @@ export default function ProductsPage() {
 			<div className="flex items-center justify-between mb-6">
 				<div>
 					<h1 className="text-3xl font-bold tracking-tight">
-						{t('products.title')}
+						{t("products.title")}
 					</h1>
 					<p className="text-muted-foreground">
-						{t('products.description')}
+						{t("products.description")}
 					</p>
 				</div>
 			</div>

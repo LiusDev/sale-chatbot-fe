@@ -21,7 +21,7 @@ export default function ChannelsPage() {
 		refetch,
 	} = useMetaPagesWithPagination({
 		page: 1,
-		limit: 12,
+		limit: 50,
 	})
 
 	const handleRefresh = () => {

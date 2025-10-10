@@ -186,7 +186,7 @@ export const useMetaPagesComparison = (params?: MetaPagesParams) => {
 export const useMetaPagesWithPagination = (initialParams?: MetaPagesParams) => {
 	const [params, setParams] = useState<MetaPagesParams>({
 		page: 1,
-		limit: 10,
+		limit: 50,
 		...initialParams,
 	})
 
